@@ -5,7 +5,13 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', [
+    'ionic', 
+    'starter.controllers', 
+    'starter.services',
+    'firebase',
+    'ngStorage'
+])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -21,6 +27,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       StatusBar.styleDefault();
     }
   });
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyC3cguFGoP4tLHugGGeRr3npX9_HlRrq08",
+    authDomain: "musicapp-e2e06.firebaseapp.com",
+    databaseURL: "https://musicapp-e2e06.firebaseio.com",
+    storageBucket: "musicapp-e2e06.appspot.com",
+  };
+  firebase.initializeApp(config);
+
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -33,7 +49,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       
       .state('landing', {
         url: '/landing',
-        abstract: true,
         templateUrl: 'templates/landing.html'
       })
 
@@ -86,6 +101,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/landing');
 
 });
