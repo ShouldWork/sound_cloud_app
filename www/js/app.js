@@ -30,11 +30,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
   $stateProvider
+      
+      .state('landing', {
+        url: '/landing',
+        abstract: true,
+        templateUrl: 'templates/landing.html'
+      })
 
   // setup an abstract state for the tabs directive
     .state('tab', {
     url: '/tab',
-    abstract: true,
+    abstract: false,
     templateUrl: 'templates/tabs.html'
   })
 
