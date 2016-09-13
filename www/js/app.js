@@ -62,31 +62,31 @@ angular.module('starter', [
 
   // Each tab has its own nav history stack:
 
-  .state('tab.dash', {
-    url: '/dash',
+  .state('tab.artist', {
+    url: '/artist',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
+      'tab-artist': {
+        templateUrl: 'templates/tab-artist.html',
         controller: 'DashCtrl'
       }
     }
   })
 
-  .state('tab.chats', {
-      url: '/chats',
+  .state('tab.songs', {
+      url: '/songs',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+        'tab-songs': {
+          templateUrl: 'templates/tab-songs.html',
+          controller: 'SongsCtrl'
         }
       }
     })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
+    .state('tab.song-detail', {
+      url: '/songs/:songId',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
+        'tab-songs': {
+          templateUrl: 'templates/songs-detail.html',
+          controller: 'SongsDetailCtrl'
         }
       }
     })
