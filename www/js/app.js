@@ -8,7 +8,6 @@
 angular.module('starter', [
     'ionic', 
     'starter.controllers', 
-    'starter.services',
     'firebase',
     'ngStorage'
 ])
@@ -33,7 +32,7 @@ angular.module('starter', [
     apiKey: "AIzaSyC3cguFGoP4tLHugGGeRr3npX9_HlRrq08",
     authDomain: "musicapp-e2e06.firebaseapp.com",
     databaseURL: "https://musicapp-e2e06.firebaseio.com",
-    storageBucket: "musicapp-e2e06.appspot.com",
+    storageBucket: "musicapp-e2e06.appspot.com"
   };
   firebase.initializeApp(config);
 
@@ -47,10 +46,12 @@ angular.module('starter', [
   // Each state's controller can be found in controllers.js
   $stateProvider
       
-      .state('landing', {
-        url: '/landing',
-        templateUrl: 'templates/landing.html'
-      })
+  .state('landing', {
+  url: '/landing',
+  templateUrl: 'templates/landing.html',
+  controller: 'landingCtrl',
+    controllerAs: 'vm'
+  })
 
   // setup an abstract state for the tabs directive
     .state('tab', {
