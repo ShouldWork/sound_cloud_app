@@ -1,15 +1,71 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
+.controller('ArtistCtrl', function(Spotify) {
+  var self = this;
+    var artists = [
+    {artist: "Poets of the Fall",
+     songs: "Heal my Wounds"
+    },
+    {artist: "Sonata Arctica",
+     songs: "Deathaura"
+    },
+    {artist: "Nightwish",
+     songs: "Slow Love Slow"
+    }
+  ]
+  self.getNewReleases = getNewReleases;
+  self.loginSpotify = loginSpotify;
 
-.controller('landingCtrl', function ($scope, $firebaseAuth, $state, $log, $firebaseObject) {
+  function loginSpotify(){
+    Spotify.login();
+  }
+
+  function getNewReleases(){
+    // Spotify.login();
+    Spotify.getNewReleases({ country: "NL" }).then(function (data) {
+      console.log(data);
+    });
+  }
+
+
+
+  function searchArtists ($scope) {
+    // see Angular 1.5 6.02 ng-repeat to find an example of a built in array like this
+    $scope.artist = artists [0, 1, 2];
+    }
+})
+
+.controller('landingCtrl', function ($http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
   vm = this;
   vm.login = login;
   vm.showLogin = false;
   vm.loginWithEmail = loginWithEmail;
   vm.showEmailLogin = showEmailLogin;
   vm.logout = logout;
+  vm.soundCloudData = soundCloudData; 
 
+
+  function soundCloudData(track){
+    var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
+    $http({
+      method: 'GET',
+      url: 'http://api.soundcloud.com/tracks/'+track+'.json?client_id='+clientid
+    }).
+    success(function (data){
+      console.log(data)
+      vm.band = data.user.username; 
+      vm.bandUrl = data.user.permalink_url;
+      vm.title = data.title;
+      vm.trackUrl - data.permalink_url;
+      vm.albumArt = data.artwork_url.replace("large","t500x500")
+      vm.wave = data.waveform_url;
+      vm.stream = data.stream_url + '?client_id=' + clientid;
+    })
+  }
+
+
+
+  
   function login(provider) {
     console.log("I'm in login");
     var auth = $firebaseAuth();
@@ -63,13 +119,13 @@ angular.module('starter.controllers', [])
           photoURL: vm.providerUser.photoURL
         }).then(function () {
           $log.log("user created.");
-          $state.go('tab');
+          $state.go('tab.artist');
         }, function () {
           $log.log("user could not be created.");
         });
       } else {
         $log.log('user already created!');
-        $state.go('tab');
+        $state.go('tab.artist');
       }
     });
   }
@@ -84,6 +140,9 @@ angular.module('starter.controllers', [])
     auth.$signOut();
     vm.displayName = undefined;
   }
+
+
+  soundCloudData('65576692');
 })
 
 .controller('SongsCtrl', function($scope, Songs) {
