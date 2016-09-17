@@ -1,8 +1,9 @@
 <ion-view view-title="MATC Music App" style="width: 100%">
-  <ion-content class="centerIt" style="width: 100%">
+  <ion-content>
+  <div class="flexColCenter" style="padding-top:33vh; width:100%">
     <button ng-if="vm.displayName" ng-click="vm.logout()">You are {{ vm.displayName }}</button>
-    <button class="button button-balanced button-full" ng-if="!vm.displayName" ng-click="vm.showEmailLogin()">Login with Email</button>
-    <div class="animate-show" ng-show ="vm.showLogin">
+    <button class="button button-calm button-block" ng-if="!vm.displayName" ng-click="vm.showEmailLogin()">Login with Email</button>
+    <div class="animate-show" style="overflow:hidden" ng-hide ="!vm.showLogin">
         <div>
             <label class="item item-input">
               <span class="input-label  padding">Email:</span>
@@ -17,15 +18,17 @@
             </label>
         </div>
 
-        <div class="padding">
-            <button ng-click="vm.loginWithEmail()">Login</button>
+        <div class="padding flexColCenter">
+            <button class="button button-small button-balanced button-block" ng-click="vm.loginWithEmail()">Login</button>
+            <button class="button button-small button-assertive button-block" ng-click="vm.showEmailLogin()">Cancel</button>
         </div>
 
-        <div class="padding spanColor" ng-if="vm.loginError.code">{{ vm.loginError.message }}
+        <div class="padding spanColor amimate-show" ng-show="vm.loginError.code">{{ vm.loginError.message }}
         </div> 
 
    </div>
-   <button class="button button-positive button-full" ng-if="!vm.displayName" ng-click="vm.setupSoundCloud()">Login with Google</button>
+   <button class="button button-positive button-block transitionAll" ng-if="!vm.displayName" ng-click="vm.setupSoundCloud()">Login with Google</button>
+   </div>
   </ion-content>
 </ion-view>
 
