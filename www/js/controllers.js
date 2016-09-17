@@ -1,68 +1,40 @@
 angular.module('starter.controllers', [])
 
-.controller('ArtistCtrl', function(Spotify) {
+.controller('ArtistCtrl', function($http) {
   var self = this;
-    var artists = [
-    {artist: "Poets of the Fall",
-     songs: "Heal my Wounds"
-    },
-    {artist: "Sonata Arctica",
-     songs: "Deathaura"
-    },
-    {artist: "Nightwish",
-     songs: "Slow Love Slow"
-    }
-  ]
-  self.getNewReleases = getNewReleases;
-  self.loginSpotify = loginSpotify;
 
-  function loginSpotify(){
-    Spotify.login();
-  }
-
-  function getNewReleases(){
-    // Spotify.login();
-    Spotify.getNewReleases({ country: "NL" }).then(function (data) {
-      console.log(data);
-    });
-  }
-
-
-
-  function searchArtists ($scope) {
-    // see Angular 1.5 6.02 ng-repeat to find an example of a built in array like this
-    $scope.artist = artists [0, 1, 2];
-    }
 })
 
-.controller('landingCtrl', function ($http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
+.controller('callbackCtrl',function($timeout,MusicService){
+  vm = this; 
+  vm.close = MusicService.close;
+  vm.MusicService = MusicService; 
+})
+.controller('landingCtrl', function (MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
   vm = this;
   vm.login = login;
   vm.showLogin = false;
   vm.loginWithEmail = loginWithEmail;
   vm.showEmailLogin = showEmailLogin;
   vm.logout = logout;
-  vm.soundCloudData = soundCloudData; 
+  vm.setupSoundCloud = MusicService.setupSoundCloud;
 
+  // SC.initialize({
+  //   client_id: 'a8899b413fa9931c7bf9b07305acf27f',
+  //   redirect_uri: 'http://localhost:8100/#/callback'
+  // });
 
-  function soundCloudData(track){
-    var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
-    $http({
-      method: 'GET',
-      url: 'http://api.soundcloud.com/tracks/'+track+'.json?client_id='+clientid
-    }).
-    success(function (data){
-      console.log(data)
-      vm.band = data.user.username; 
-      vm.bandUrl = data.user.permalink_url;
-      vm.title = data.title;
-      vm.trackUrl - data.permalink_url;
-      vm.albumArt = data.artwork_url.replace("large","t500x500")
-      vm.wave = data.waveform_url;
-      vm.stream = data.stream_url + '?client_id=' + clientid;
-    })
-  }
-
+  // // initiate auth popup
+  // SC.connect(function(response){
+  //   sc.get("/me",function(response){
+  //     var data={};
+  //     console.log(response)
+  //   })
+  // }).then(function() {
+  //   return SC.get('/me');
+  // }).then(function(me) {
+  //   alert('Hello, ' + me.username);
+  // });
 
 
   
@@ -131,6 +103,7 @@ angular.module('starter.controllers', [])
   }
 
   function loginError(error) {
+    vm.loginError = error; 
     $log.log("Authentication failed:", error);
   }
 
@@ -140,9 +113,6 @@ angular.module('starter.controllers', [])
     auth.$signOut();
     vm.displayName = undefined;
   }
-
-
-  soundCloudData('65576692');
 })
 
 .controller('SongsCtrl', function($scope, Songs) {

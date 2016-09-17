@@ -9,8 +9,7 @@ var app = angular.module('starter', [
     'ionic', 
     'starter.controllers', 
     'firebase',
-    'ngStorage',
-    'spotify'
+    'ngStorage'
     ])
 
 .run(function($ionicPlatform) {
@@ -39,20 +38,17 @@ var app = angular.module('starter', [
 
 })
 
-.config(function($stateProvider, $urlRouterProvider, SpotifyProvider) {
-  console.log(SpotifyProvider);
-  SpotifyProvider.setClientId('e306aea3736541b2a3c06a1d832a5a96');
-  SpotifyProvider.setRedirectUri('http://localhost:8100/#/tab/artist');
-  SpotifyProvider.setScope('user-read-private playlist-read-private playlist-modify-private playlist-modify-public');
-  // If you already have an auth token
-  // SpotifyProvider.setAuthToken('zoasliu1248sdfuiknuha7882iu4rnuwehifskmkiuwhjg23');
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
-  console.log(SpotifyProvider);
+.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
-      
+  
+
+  .state('callback',{
+    url: '/callback',
+    templateUrl: 'templates/callback.html',
+    controller: 'callbackCtrl',
+      controllerAs: 'vm'
+  })
+
   .state('landing', {
   url: '/landing',
   templateUrl: 'templates/landing.html',

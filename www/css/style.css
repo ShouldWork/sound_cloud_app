@@ -1,0 +1,37 @@
+.centerIt{
+	margin: auto;
+	display: flex;
+	flex-flow: column wrap;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	width: 100%;
+}
+
+
+.spanColor{
+	background: rgba(255,42,20,.80);
+	border-radius: 20px;
+	text-align: center;
+}
+
+#loginCredentials{
+	transition: all .5s ease-in;
+}
+
+
+.animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+  transition: all ease-out 0.5s;
+  max-height: 800px;
+}
+
+.animate-show.ng-hide {
+  line-height: 0;
+  opacity: 0;
+  max-height: 0;
+}
+
+
+.button-full{
+	width: 100%;
+}
