@@ -10,7 +10,7 @@ angular.module('starter.controllers', [])
   vm.close = MusicService.close;
   vm.MusicService = MusicService; 
 })
-.controller('landingCtrl', function (MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
+.controller('landingCtrl', function ($q,MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
   vm = this;
   vm.login = login;
   vm.showLogin = false;
@@ -18,26 +18,18 @@ angular.module('starter.controllers', [])
   vm.showEmailLogin = showEmailLogin;
   vm.logout = logout;
   vm.setupSoundCloud = MusicService.setupSoundCloud;
+  vm.getTracks = MusicService.getTracks;
+  // vm.showResults = showResults; 
 
-  // SC.initialize({
-  //   client_id: 'a8899b413fa9931c7bf9b07305acf27f',
-  //   redirect_uri: 'http://localhost:8100/#/callback'
-  // });
+  function getTracks(){
+    MusicService.getTracks().then(function(tracks){
+      vm.searchResults = tracks;
+      console.log(vm.searchResults);
+    });
+  }
 
-  // // initiate auth popup
-  // SC.connect(function(response){
-  //   sc.get("/me",function(response){
-  //     var data={};
-  //     console.log(response)
-  //   })
-  // }).then(function() {
-  //   return SC.get('/me');
-  // }).then(function(me) {
-  //   alert('Hello, ' + me.username);
-  // });
-
-
-  
+  getTracks();
+ 
   function login(provider) {
     console.log("I'm in login");
     var auth = $firebaseAuth();
@@ -75,6 +67,10 @@ angular.module('starter.controllers', [])
     vm.displayName = firebaseUser.user ? firebaseUser.user.displayName : firebaseUser.email;
     vm.showLogin = false;
     vm.password = undefined;
+
+
+
+
 
     vm.providerUser = firebaseUser.user;
     var ref = firebase.database().ref("users");
