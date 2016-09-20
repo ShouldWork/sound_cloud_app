@@ -39,6 +39,16 @@
     align-items: center;
 }
 
+
+.flexSize{
+	display: flex;
+	flex-flow: row wrap;
+	flex-basis: 80px;
+	flex-shrink: 1;
+	flex-grow: 2;
+	/*flex: 1 2 100px;*/
+}
+
 [class^='button']{
 	max-width: 200px;
 }
@@ -46,4 +56,41 @@
 .border-sides{
 	border-right: 2px solid gray;
 	border-left: 2px solid gray;
+}
+
+
+.card-background-page {
+	ion-card{
+	    position: relative;
+	    text-align: center;
+	}
+
+	.card-title {
+	    position: absolute;
+	    top: 96%;
+	    font-size: 2.0em;
+	    width: 100%;
+	    font-weight: bold;
+	    color: #fff;
+	}
+
+	.card-subtitle {
+	    font-size: 1.0em;
+	    position: absolute;
+	    top: 52%;
+	    width: 100%;
+	    color: #fff;
+	}
+
+}
+
+
+.card{
+	width: 100%;
+	height: 100%;
+	max-width: 500px;
+	p{
+		color: ghostWhite;
+		text-overflow: ellipsis;
+	}
 }

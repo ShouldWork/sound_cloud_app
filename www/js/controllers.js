@@ -1,8 +1,46 @@
 angular.module('starter.controllers', [])
 
-.controller('ArtistCtrl', function($http) {
-  var self = this;
+.controller('ArtistCtrl', function($http,MusicService) {
+  var vm = this;
+  var showing = false; 
+  vm.getTracks = getTracks; 
+  vm.searchTrack = searchTrack; 
+  vm.isEnter = isEnter;
+  vm.playSong = playSong;
+  vm.showDetails = showDetails;
 
+
+ function playSong(song){
+  event.stopPropagation()
+  MusicService.playSong(song);
+ }
+
+  function showDetails(){
+      return vm.showing = showing = (showing) ? false : true;
+  } 
+
+  function isEnter(key){
+    return MusicService.isEnter(key)
+  }
+
+  function searchTrack(query,key){
+    var theKey = isEnter(key)
+    console.log(theKey)
+    if (isEnter(key)){
+      MusicService.searchTrack(query).then(function(tracks){
+        vm.searchResults = tracks; 
+        console.log(vm.searchResults);
+      });
+    }
+  }
+ 
+  function getTracks(){
+    MusicService.getTracks().then(function(tracks){
+      vm.searchResults = tracks;
+      console.log(vm.searchResults);
+    });
+  }
+   getTracks();
 })
 
 .controller('callbackCtrl',function($timeout,MusicService){
@@ -19,16 +57,12 @@ angular.module('starter.controllers', [])
   vm.logout = logout;
   vm.setupSoundCloud = MusicService.setupSoundCloud;
   vm.getTracks = MusicService.getTracks;
+  vm.isEnter = isEnter; 
   // vm.showResults = showResults; 
 
-  function getTracks(){
-    MusicService.getTracks().then(function(tracks){
-      vm.searchResults = tracks;
-      console.log(vm.searchResults);
-    });
+  function isEnter(key){
+    return MusicService.isEnter(key)
   }
-
-  getTracks();
  
   function login(provider) {
     console.log("I'm in login");
@@ -43,23 +77,26 @@ angular.module('starter.controllers', [])
     vm.showLogin = !vm.showLogin;
   }
 
-  function loginWithEmail() {
-    var auth = $firebaseAuth();
-    auth.$createUserWithEmailAndPassword(vm.email, vm.password)
-        .then(function () {
-          auth.$signInWithEmailAndPassword(vm.email, vm.password)
-              .then(loginSuccess)
-              .catch(loginError);
-        }, function (error) {
-          if (error.code === "auth/email-already-in-use") {
+  function loginWithEmail(key) {
+    console.log(key + " " + isEnter(key))
+    if (isEnter(key)){
+      var auth = $firebaseAuth();
+      auth.$createUserWithEmailAndPassword(vm.email, vm.password)
+          .then(function () {
             auth.$signInWithEmailAndPassword(vm.email, vm.password)
                 .then(loginSuccess)
                 .catch(loginError);
-          } else {
-            $log.error(error);
-          }
-        })
-        .catch(loginError);
+          }, function (error) {
+            if (error.code === "auth/email-already-in-use") {
+              auth.$signInWithEmailAndPassword(vm.email, vm.password)
+                  .then(loginSuccess)
+                  .catch(loginError);
+            } else {
+              $log.error(error);
+            }
+          })
+          .catch(loginError);
+    }
   }
 
   function loginSuccess(firebaseUser) {

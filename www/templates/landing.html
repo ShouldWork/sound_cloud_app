@@ -14,7 +14,7 @@
         <div>
             <label class="item item-input" for="password">
               <span class="input-label padding">Password:</span>
-              <input type="password" id="password" ng-model="vm.password" required>  
+              <input type="password" id="password" ng-model="vm.password" required ng-keypress="vm.loginWithEmail($event)">  
             </label>
         </div>
 
@@ -25,10 +25,8 @@
 
         <div class="padding spanColor amimate-show" ng-show="vm.loginError.code">{{ vm.loginError.message }}
         </div> 
-
    </div>
-   <button class="button button-positive button-block transitionAll" ng-if="!vm.displayName" ng-click="vm.setupSoundCloud()">Login with Google</button>
-   <button class="button button-positive button-block transitionAll" ng-if="!vm.displayName" ng-click="vm.showResults()">Show results</button>
+   <button class="button button-positive button-block transitionAll animate-show" ng-click="vm.login('google')" ng-hide ="vm.showLogin" >Login with Google</button>
    </div>
   </ion-content>
 </ion-view>
