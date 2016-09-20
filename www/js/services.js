@@ -3,7 +3,7 @@ angular.module('starter').service('MusicService',MusicService);
 function MusicService($firebaseArray,$http,$q){
 	var service = this; 
 	var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
-	service.getTracks = getTracks; 
+	// service.getTracks = getTracks; 
 	service.getUser   = getUser; 
 	service.close 	  = close;
   service.setupSoundCloud = setupSoundCloud; 
@@ -33,22 +33,22 @@ function MusicService($firebaseArray,$http,$q){
 
 
 
-  function getTracks() {
-    var deferred = $q.defer();
-    SC.initialize({
-      client_id: clientid
-    });
-    var page_size = 20;
-    SC.get('/tracks', {
-      limit: page_size, linked_partitioning: 1
-    }).then(function(tracks) {
-      deferred.resolve(tracks.collection);
-    });
-    return deferred.promise;
-  };
+  // function getTracks() {
+  //   var deferred = $q.defer();
+  //   SC.initialize({
+  //     client_id: clientid
+  //   });
+  //   var page_size = 20;
+  //   SC.get('/tracks', {
+  //     limit: page_size, linked_partitioning: 1
+  //   }).then(function(tracks) {
+  //     deferred.resolve(tracks.collection);
+  //   });
+  //   return deferred.promise;
+  // };
 
   // service.soundCloud.getTracks();
-
+  console.log(SC);
 
   function connectSoundCloud(){
     SC.connect(function(response){
@@ -95,7 +95,8 @@ function MusicService($firebaseArray,$http,$q){
       limit: 10,
       linked_partioning: 1,
       q:query
-      // title: query
+      // bpm:120
+      // title: "stressed out"
 
     })
     .then(function(tracks){

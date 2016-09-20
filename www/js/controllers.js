@@ -27,14 +27,14 @@ angular.module('starter.controllers', [])
   }
 
   function searchTrack(query,key){
-    var pt = new Date().getTime();
-   if (isEnter(key)){
+    // var pt = new Date().getTime();
+   // if (isEnter(key)){
 
       MusicService.searchTrack(query).then(function(tracks){
         vm.searchResults = tracks; 
         console.log(vm.searchResults);
       });
-    }
+    // }
   }
  
   function getTracks(){
