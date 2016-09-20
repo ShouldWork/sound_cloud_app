@@ -28,18 +28,13 @@ angular.module('starter.controllers', [])
 
   function searchTrack(query,key){
     var pt = new Date().getTime();
-    console.log(pt + " vs. " + now)
-    while (pt <= now + 5 || now == undefined){
-      console.log(pt + " vs. " + now)
-      var now = new Date().getTime(); 
-    }
-    // if (isEnter(key)){
+   if (isEnter(key)){
 
       MusicService.searchTrack(query).then(function(tracks){
         vm.searchResults = tracks; 
         console.log(vm.searchResults);
       });
-    // }
+    }
   }
  
   function getTracks(){
