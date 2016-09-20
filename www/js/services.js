@@ -1,89 +1,77 @@
 angular.module('starter').service('MusicService',MusicService);
 
 function MusicService($firebaseArray,$http,$q){
-<<<<<<< HEAD
 	var service = this; 
 	var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
 	service.getTracks = getTracks; 
 	service.getUser   = getUser; 
 	service.close 	  = close;
-	service.setupSoundCloud = setupSoundCloud; 
-
-
-	function setupSoundCloud(){
-		SC.initialize({
-			client_id: clientid,
-			redirect_uri: 'http://localhost:8100/#/callback'
-		});
-	}
-
-	function connectSoundCloud(){
-		SC.connect(function(response){
-			sc.get("/me",function(response){
-			var data={};
-			console.log(response)
-			})
-		}).then(f unction(){
-			return SC.get('/me');
-		}).then(function(me){
-			alert('Hello, ' + me.username);
-		});
-	}
-
-	function getTracks() {
-		var deferred = $q.defer();
-		var page_size = 20; 
-		
-		SC.initialize({
-			client_id: clientid
-		})
-
-		SC.get('/tracks', {
-			limit: page_size, linked_partitioning: 1
-		}).then(function(tracks) {
-			deferred.resolve(tracks);
-		});
-		
-		return deferred.promise;
-	};
-
-
-
-
-	function getUser(userID){
-		var deferred = $q.defer(); 
-		$http({
-			method: 'GET',
-			url: 'http://api.soundcloud.com/users/' + userID + '.json?client_id=' + clientid
-		}).then(function(response){
-			deferred.resolve(response.data);
-		});
-		return deferred.promise; 
-	}
-
-	function close(){
-	    console.log("Started")
-	    window.setTimeout(window.opener.SC.connectCallback, 1);
-  	}	
-=======
-  var service = this;
-  var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
-  service.getTracks = getTracks;
-  service.getUser   = getUser;
-  service.close 	  = close;
-  service.setupSoundCloud = setupSoundCloud;
+  service.setupSoundCloud = setupSoundCloud; 
   service.searchTrack = searchTrack; 
   service.isEnter = isEnter; 
   service.playSong = playSong;
 
+  service.soundCloud = {
+    scInit: function(){
+      return SC.initialize({
+                client_id: clientid
+              })
+    },
+     getTracks:  function(){
+        var deferred =  $q.defer(),
+            limit_results = 20;
+        SC.get('/tracks', {
+          limit: limit_results, linked_partitioning: 1
+        }).then(function(tracks) {
+          deferred.resolve(tracks.collection);
+        });
+          return deferred.promise 
+    }    
+  };
+
+
+
+
+
+  function getTracks() {
+    var deferred = $q.defer();
+    SC.initialize({
+      client_id: clientid
+    });
+    var page_size = 20;
+    SC.get('/tracks', {
+      limit: page_size, linked_partitioning: 1
+    }).then(function(tracks) {
+      deferred.resolve(tracks.collection);
+    });
+    return deferred.promise;
+  };
+
+  // service.soundCloud.getTracks();
+
+
+  function connectSoundCloud(){
+    SC.connect(function(response){
+      sc.get("/me",function(response){
+      var data={};
+      console.log(response)
+      })
+    }).then(function(){
+      return SC.get('/me');
+    }).then(function(me){
+      alert('Hello, ' + me.username);
+    });
+  }
+
+
   function playSong(song){
-  	
-  	SC.initialize({
-  		client_id: clientid
-  	});
-  	SC.stream('/tracks/' + song).then(function(player){
-    	player.play();
-  	});
+    
+    SC.initialize({
+      client_id: clientid
+    });
+    SC.stream('/tracks/' + song).then(function(player){
+      player.play();
+    });
   }
 
 
@@ -99,21 +87,21 @@ function MusicService($firebaseArray,$http,$q){
 
 
   function searchTrack(query){
-  	var deferred = $q.defer();
-  	SC.initialize({
-  		client_id: clientid
-  	});
-  	SC.get('/tracks',{
-  		limit: 10,
-  		linked_partioning: 1,
-  		q:query
-  		// title: query
+    var deferred = $q.defer();
+    SC.initialize({
+      client_id: clientid
+    });
+    SC.get('/tracks',{
+      limit: 10,
+      linked_partioning: 1,
+      q:query
+      // title: query
 
-  	})
-  	.then(function(tracks){
-  		deferred.resolve(tracks);
-  	});
-  	return deferred.promise;
+    })
+    .then(function(tracks){
+      deferred.resolve(tracks);
+    });
+    return deferred.promise;
   }
 
   function setupSoundCloud(){
@@ -134,19 +122,6 @@ function MusicService($firebaseArray,$http,$q){
     });
   }
 
-  function getTracks() {
-    var deferred = $q.defer();
-    SC.initialize({
-      client_id: clientid
-    });
-    var page_size = 20;
-    SC.get('/tracks', {
-      limit: page_size, linked_partitioning: 1
-    }).then(function(tracks) {
-      deferred.resolve(tracks.collection);
-    });
-    return deferred.promise;
-  };
 
   function getUser(userID){
     var deferred = $q.defer();
@@ -163,7 +138,6 @@ function MusicService($firebaseArray,$http,$q){
     console.log("Started")
     window.setTimeout(window.opener.SC.connectCallback, 1);
   }
->>>>>>> fb28b822eb0482ec72dba2d9b1324076ae1f5c69
 
 
 }

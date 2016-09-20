@@ -1,14 +1,14 @@
 <ion-view view-title="Artists">
   <ion-content class="padding">
    <div class="list list-inset">
-	    <label style="float: left" class="item item-input">
+	    <label style="float: left; width:  75%" class="item-input">
 	      <i class="icon ion-search placeholder-icon"></i>
-	      <input type="text" placeholder="Search" ng-model="searchQuery" ng-keypress="vm.searchTrack(searchQuery,$event)">
+	      <input style="font-size: 2em;" type="text" placeholder="Search" ng-model="searchQuery" ng-keypress="vm.searchTrack(searchQuery,$event)">
 	      <!-- <button class="button icon ion-gear-a"></button> -->
 	    </label>
-      	<button style="z-index: 1000; float: right" class="button button-icon button-outline ion-search button-balanced" type="submit" ng-click="vm.searchTrack(searchQuery)">Search</button>
+      	<button style="margin-right: 5px; float: right" class="button button-icon button-outline ion-search button-balanced" type="submit" ng-click="vm.searchTrack(searchQuery)">Search</button>
    </div>
-    <div ng-repeat="detail in vm.searchResults" class="card-background-page" style="margin: 5px" > <!-- this used to be vm.soundResults and that worked-->
+    <div ng-repeat="detail in vm.searchResults" class="card-background-page animate-repeat" style="margin: 5px" > <!-- this used to be vm.soundResults and that worked-->
 	    <div ng-click="showing = (showing==true ? false : true)"  class="list">
 		  <div  style="background: orange" class="item item-avatar">
 		    <img ng-src="{{detail.user.avatar_url}}">
@@ -16,14 +16,12 @@
 		    <h3 class="card-subtitle" ng-bind="detail.title" class="card-subtitle"></h3>
 		  </div>
 
-		  <div ng-hide="!showing" style="background: rgba(0,0,0,0.5); color: ghostWhite" class="item item-body">
+		  <div ng-show="showing" style="background: rgba(0,0,0,0.5); color: ghostWhite" class="animate-show item-body">
 		    <img class="full-image" ng-src="{{ detail.artwork_url }}">
 		    <h2 style="color:ghostWhite" ng-bind="detail.genre" class="card-title"></h2>
 		    <h2 style="color:ghostWhite" ng-bind="detail.status"></h2>
-		    <p style="color:ghostWhite">
-		      {{ detail.description | limitTo:100 }}
-		    </p>
-		    	<button style="font-size: 2em; float: right" class="button button-outline button-icon ion-ios-musical-notes button-calm" ng-click="vm.playSong(detail.id)"></button>
+		    <p style="color:ghostWhite" ng-bind="detail.description"></p>
+		    <button style="font-size: 2em; float: right" class="button button-outline button-icon ion-ios-musical-notes button-calm" ng-click="vm.playSong(detail.id)"></button>
 		  </div>
 		</div>	
     </div>

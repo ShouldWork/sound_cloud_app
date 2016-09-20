@@ -8,11 +8,14 @@ angular.module('starter.controllers', [])
   vm.isEnter = isEnter;
   vm.playSong = playSong;
   vm.showDetails = showDetails;
+  vm.initCloud = MusicService.soundCloud.scInit();
+  vm.mySC = MusicService.soundCloud; 
 
-
+ // console.log(vm.mySC)
+ 
  function playSong(song){
-  event.stopPropagation()
-  MusicService.playSong(song);
+     event.stopPropagation()
+     MusicService.playSong(song);
  }
 
   function showDetails(){
@@ -24,20 +27,26 @@ angular.module('starter.controllers', [])
   }
 
   function searchTrack(query,key){
-    var theKey = isEnter(key)
-    console.log(theKey)
-    if (isEnter(key)){
+    var pt = new Date().getTime();
+    console.log(pt + " vs. " + now)
+    while (pt <= now + 5 || now == undefined){
+      console.log(pt + " vs. " + now)
+      var now = new Date().getTime(); 
+    }
+    // if (isEnter(key)){
+
       MusicService.searchTrack(query).then(function(tracks){
         vm.searchResults = tracks; 
         console.log(vm.searchResults);
       });
-    }
+    // }
   }
  
   function getTracks(){
-    MusicService.getTracks().then(function(tracks){
+      vm.mySC.scInit();
+      vm.mySC.getTracks().then(function(tracks){
       vm.searchResults = tracks;
-      console.log(vm.searchResults);
+      // console.log(vm.searchResults);
     });
   }
    getTracks();
