@@ -31,15 +31,18 @@ function MusicService($firebaseArray,$http,$q){
 
 	function getTracks() {
 		var deferred = $q.defer();
+		var page_size = 20; 
+		
 		SC.initialize({
 			client_id: clientid
 		})
-		var page_size = 20; 
+
 		SC.get('/tracks', {
 			limit: page_size, linked_partitioning: 1
 		}).then(function(tracks) {
 			deferred.resolve(tracks);
 		});
+		
 		return deferred.promise;
 	};
 
