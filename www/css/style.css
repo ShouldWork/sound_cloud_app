@@ -104,7 +104,7 @@
 .animate-repeat.ng-move,
 .animate-repeat.ng-enter {
   opacity:0;
-  max-height:0;
+  max-width:0;
   color: gray;
   /*transform: rotate(180deg);*/
 }
@@ -113,11 +113,19 @@
 .animate-repeat.ng-move.ng-move-active,
 .animate-repeat.ng-enter.ng-enter-active {
   opacity:1;
-  max-height:30px;
+  max-width:100vw;
   /*transform: rotate(0deg);*/
 }
 
 
 .isPlaying{
 	background: green;
+}
+
+.widgetContainer{
+	position: absolute;
+    z-index: 10;
+    width: 100vw;
+    height: 200px;
+    bottom: 0;
 }
