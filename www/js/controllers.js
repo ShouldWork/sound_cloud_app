@@ -6,42 +6,51 @@ angular.module('starter.controllers', [])
   vm.getTracks = getTracks; 
   vm.searchTrack = searchTrack; 
   vm.isEnter = isEnter;
-  vm.playSong = playSong;
-  vm.showDetails = showDetails;
+  vm.embedSong = embedSong;
+  vm.streamSong = streamSong;
+  vm.streamPause = streamPause; 
   vm.initCloud = MusicService.soundCloud.scInit();
   vm.mySC = MusicService.soundCloud; 
+  vm.embededPlayer = false; 
+  vm.isStreaming = false; 
 
- // console.log(vm.mySC)
- 
- function playSong(song){
-     event.stopPropagation()
-     MusicService.playSong(song);
+ function embedSong(song){
+     var container = document.getElementById('soundCloudWidget');
+     vm.embededPlayer = true; 
+     event.stopPropagation();
+     vm.mySC.embedSong(song,container);
  }
 
-  function showDetails(){
-      return vm.showing = showing = (showing) ? false : true;
-  } 
+
+ function streamSong(song){
+
+  event.stopPropagation();
+  vm.mySC.scInit();
+  vm.mySC.streamSong(song);
+  vm.isStreaming = true; 
+ }
+
+ function streamPause(song){
+  vm.mySC.streamPause(song);
+  vm.isStreaming = false; 
+ }
 
   function isEnter(key){
     return MusicService.isEnter(key)
   }
 
   function searchTrack(query,key){
-    // var pt = new Date().getTime();
-   // if (isEnter(key)){
-
+   if (isEnter(key)){
       MusicService.searchTrack(query).then(function(tracks){
         vm.searchResults = tracks; 
-        console.log(vm.searchResults);
       });
-    // }
+    }
   }
  
   function getTracks(){
       vm.mySC.scInit();
       vm.mySC.getTracks().then(function(tracks){
       vm.searchResults = tracks;
-      // console.log(vm.searchResults);
     });
   }
    getTracks();
@@ -52,6 +61,7 @@ angular.module('starter.controllers', [])
   vm.close = MusicService.close;
   vm.MusicService = MusicService; 
 })
+
 .controller('landingCtrl', function ($q,MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
   vm = this;
   vm.login = login;
