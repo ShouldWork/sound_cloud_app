@@ -56,41 +56,7 @@
 }
 
 
-.card-background-page {
-	ion-card{
-	    position: relative;
-	    text-align: center;
-	}
 
-	.card-title {
-	    position: absolute;
-	    top: 96%;
-	    font-size: 2.0em;
-	    width: 100%;
-	    font-weight: bold;
-	    color: #fff;
-	}
-
-	.card-subtitle {
-	    font-size: 1.0em;
-	    position: absolute;
-	    top: 52%;
-	    width: 100%;
-	    color: #fff;
-	}
-
-}
-
-
-.card{
-	width: 100%;
-	height: 100%;
-	max-width: 500px;
-	p{
-		color: ghostWhite;
-		text-overflow: ellipsis;
-	}
-}
 
 
 .animate-repeat.ng-move,
@@ -115,4 +81,8 @@
   opacity:1;
   max-height:30px;
   /*transform: rotate(0deg);*/
+}
+
+.tabs-icon-top {
+	color: #c49137;
 }

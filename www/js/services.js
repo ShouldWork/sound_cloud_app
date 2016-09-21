@@ -26,29 +26,11 @@ function MusicService($firebaseArray,$http,$q){
           deferred.resolve(tracks.collection);
         });
           return deferred.promise 
-    }    
+    }
   };
 
 
 
-
-
-  // function getTracks() {
-  //   var deferred = $q.defer();
-  //   SC.initialize({
-  //     client_id: clientid
-  //   });
-  //   var page_size = 20;
-  //   SC.get('/tracks', {
-  //     limit: page_size, linked_partitioning: 1
-  //   }).then(function(tracks) {
-  //     deferred.resolve(tracks.collection);
-  //   });
-  //   return deferred.promise;
-  // };
-
-  // service.soundCloud.getTracks();
-  console.log(SC);
 
   function connectSoundCloud(){
     SC.connect(function(response){
@@ -65,7 +47,7 @@ function MusicService($firebaseArray,$http,$q){
 
 
   function playSong(song){
-    
+
     SC.initialize({
       client_id: clientid
     });
@@ -148,58 +130,6 @@ function MusicService($firebaseArray,$http,$q){
 
 
 
-// angular.module('starter')
-
-//     .service('MusicService', MusicService);
-
-// function MusicService($firebaseArray) {
-//   var self = this;
-
-//   var ref = firebase.database().ref().child("users");
-
-//   self.users = $firebaseArray(ref);
-
-//   self.setupSoundCloud = setupSoundCloud; 
-
-
-//   function setupSoundCloud(){
-//   	SC.initialize({
-//   		client_id: 'a8899b413fa9931c7bf9b07305acf27f',
-//   		redirect_uri: 'http://localhost:8100/#/callback'
-//   	});
-
-//   	SC.connect(function(response){
-//   		sc.get("/me",function(response){
-//   			var data={};
-//   			console.log(response)
-//   		})
-//   	}).then(function(){
-//   		return SC.get('/me');
-//   	}).then(function(me){
-//   		alert('Hello, ' + me.username);
-//   	});
-//   }
-
-//     function soundCloudData(track){
-//     var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
-//     $http({
-//       method: 'GET',
-//       url: 'http://api.soundcloud.com/tracks/'+track+'.json?client_id='+clientid
-//     }).
-//     success(function (data){
-//       console.log(data)
-//       vm.band = data.user.username; 
-//       vm.bandUrl = data.user.permalink_url;
-//       vm.title = data.title;
-//       vm.trackUrl - data.permalink_url;
-//       vm.albumArt = data.artwork_url.replace("large","t500x500")
-//       vm.wave = data.waveform_url;
-//       vm.stream = data.stream_url + '?client_id=' + clientid;
-//     })
-//   }
-
-
-// };
 
 
 

@@ -14,7 +14,9 @@ angular.module('starter.controllers', [])
  // console.log(vm.mySC)
  
  function playSong(song){
-     event.stopPropagation()
+   // vm.playing = (vm.playing==true ? false : true);
+   // console.log(vm.playing)
+     event.stopPropagation();
      MusicService.playSong(song);
  }
 
