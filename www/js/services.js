@@ -41,20 +41,21 @@ function MusicService($firebaseArray,$http,$q){
     },
     streamSong: function(song){
       SC.stream('tracks/' + song).then(function(player){
-        service.player = player;
         player.play();
-        console.log(player)
-        console.log(player._isPlaying)
+        service.player = player;
+        console.log(service.player)
+        console.log(service.player.controller._state)
       });
     },
     streamPause: function(){
         var player = service.player; 
         // player._isPlaying contains true or false for whether it's playing or not.
         // player.controller._status will show the current state of the song either paused or playing. 
-        // stream info contains information about the current track
+        // player.controller.stream info contains information about the current track
         // ie bitrate,duration,extension,issuedAt,protocol,and the url for the playing track
         player.pause();
-        console.log(player._isPlaying)
+        service.player = player;
+        console.log(service.player.controller._state)
     }   
   };
 
