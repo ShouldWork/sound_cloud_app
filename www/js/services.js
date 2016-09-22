@@ -1,6 +1,7 @@
 angular.module('musicapp').service('MusicService',MusicService);
 
 function MusicService($firebaseArray,$http,$q){
+<<<<<<< HEAD
   var service = this;
   var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
   // service.getTracks = getTracks; 
@@ -9,6 +10,16 @@ function MusicService($firebaseArray,$http,$q){
   service.setupSoundCloud = setupSoundCloud;
   service.searchTrack = searchTrack;
   service.isEnter = isEnter;
+=======
+	var service = this; 
+	var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
+	// service.getTracks = getTracks; 
+	service.getUser   = getUser; 
+	service.close 	  = close;
+  service.setupSoundCloud = setupSoundCloud; 
+  service.isEnter = isEnter; 
+  // service.searchTrack = searchTrack; 
+>>>>>>> 07c4dd7dacea7394d84781f46684d3654048680a
   // service.isStreaming = false; 
   // service.playSong = playSong;
 
@@ -30,6 +41,7 @@ function MusicService($firebaseArray,$http,$q){
       return deferred.promise
     },
     embedSong: function(song,container){
+<<<<<<< HEAD
       SC.oEmbed('http://api.soundcloud.com/tracks/' + song,{
         element: container,
         auto_play: true,
@@ -39,6 +51,24 @@ function MusicService($firebaseArray,$http,$q){
         },
         color: '#ff3a00',
       });
+=======
+        SC.oEmbed('http://api.soundcloud.com/tracks/' + song,{
+           element: container,
+           auto_play: true,
+           maxheight: 166,
+           sharing: false,
+           show_comments: true,
+           show_user: false,
+           buying: false,
+           liking: false,
+           download: true,
+           show_playcount: true,
+           callback: function(){
+            console.log("From the call back in the embedSong")
+           },
+           color: '#ff3a00',
+        });
+>>>>>>> 07c4dd7dacea7394d84781f46684d3654048680a
     },
     streamSong: function(song){
       SC.stream('tracks/' + song).then(function(player){
@@ -49,6 +79,7 @@ function MusicService($firebaseArray,$http,$q){
       });
     },
     streamPause: function(){
+<<<<<<< HEAD
       var player = service.player;
       // player._isPlaying contains true or false for whether it's playing or not.
       // player.controller._status will show the current state of the song either paused or playing. 
@@ -58,7 +89,50 @@ function MusicService($firebaseArray,$http,$q){
       service.player = player;
       console.log(service.player.controller._state)
     }
+=======
+        var player = service.player; 
+        // player._isPlaying contains true or false for whether it's playing or not.
+        // player.controller._status will show the current state of the song either paused or playing. 
+        // player.controller.stream info contains information about the current track
+        // ie bitrate,duration,extension,issuedAt,protocol,and the url for the playing track
+        player.pause();
+        service.player = player;
+        console.log(service.player.controller._state)
+    },
+    searchTrack: function(query){
+      var deferred = $q.defer();
+      SC.get('/tracks',{
+        limit: 20,
+        linked_partioning: 1,
+        q:query,
+        title:query
+      })
+      .then(function(tracks){
+        deferred.resolve(tracks);
+      })
+      return deferred.promise;
+    }   
+>>>>>>> 07c4dd7dacea7394d84781f46684d3654048680a
   };
+
+  // function searchTrack(query){
+  //   var deferred = $q.defer();
+  //   SC.initialize({
+  //     client_id: clientid
+  //   });
+  //   SC.get('/tracks',{
+  //     limit: 10,
+  //     linked_partioning: 1,
+  //     q:query
+  //     // bpm:120
+  //     // title: "stressed out"
+
+  //   })
+  //   .then(function(tracks){
+  //     deferred.resolve(tracks);
+  //   });
+  //   return deferred.promise;
+  // }
 
   function connectSoundCloud(){
     SC.connect(function(response){
@@ -81,6 +155,7 @@ function MusicService($firebaseArray,$http,$q){
     }
   }
 
+<<<<<<< HEAD
   function searchTrack(query){
     var deferred = $q.defer();
     SC.initialize({
@@ -100,6 +175,8 @@ function MusicService($firebaseArray,$http,$q){
     return deferred.promise;
   }
 
+=======
+>>>>>>> 07c4dd7dacea7394d84781f46684d3654048680a
   function setupSoundCloud(){
     SC.initialize({
       client_id: 'a8899b413fa9931c7bf9b07305acf27f',
