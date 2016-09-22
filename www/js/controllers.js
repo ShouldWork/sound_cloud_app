@@ -41,7 +41,8 @@ angular.module('starter.controllers', [])
 
   function searchTrack(query,key){
    if (isEnter(key)){
-      MusicService.searchTrack(query).then(function(tracks){
+      vm.mySC.scInit();
+      vm.mySC.searchTrack(query).then(function(tracks){
         vm.searchResults = tracks; 
       });
     }

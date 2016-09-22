@@ -7,8 +7,8 @@ function MusicService($firebaseArray,$http,$q){
 	service.getUser   = getUser; 
 	service.close 	  = close;
   service.setupSoundCloud = setupSoundCloud; 
-  service.searchTrack = searchTrack; 
   service.isEnter = isEnter; 
+  // service.searchTrack = searchTrack; 
   // service.isStreaming = false; 
   // service.playSong = playSong;
 
@@ -33,6 +33,13 @@ function MusicService($firebaseArray,$http,$q){
            element: container,
            auto_play: true,
            maxheight: 166,
+           sharing: false,
+           show_comments: true,
+           show_user: false,
+           buying: false,
+           liking: false,
+           download: true,
+           show_playcount: true,
            callback: function(){
             console.log("From the call back in the embedSong")
            },
@@ -56,8 +63,40 @@ function MusicService($firebaseArray,$http,$q){
         player.pause();
         service.player = player;
         console.log(service.player.controller._state)
+    },
+    searchTrack: function(query){
+      var deferred = $q.defer();
+      SC.get('/tracks',{
+        limit: 20,
+        linked_partioning: 1,
+        q:query,
+        title:query
+      })
+      .then(function(tracks){
+        deferred.resolve(tracks);
+      })
+      return deferred.promise;
     }   
   };
+
+  // function searchTrack(query){
+  //   var deferred = $q.defer();
+  //   SC.initialize({
+  //     client_id: clientid
+  //   });
+  //   SC.get('/tracks',{
+  //     limit: 10,
+  //     linked_partioning: 1,
+  //     q:query
+  //     // bpm:120
+  //     // title: "stressed out"
+
+  //   })
+  //   .then(function(tracks){
+  //     deferred.resolve(tracks);
+  //   });
+  //   return deferred.promise;
+  // }
 
   function connectSoundCloud(){
     SC.connect(function(response){
@@ -78,25 +117,6 @@ function MusicService($firebaseArray,$http,$q){
     } else {
       return true;
     }
-  }
-
-  function searchTrack(query){
-    var deferred = $q.defer();
-    SC.initialize({
-      client_id: clientid
-    });
-    SC.get('/tracks',{
-      limit: 10,
-      linked_partioning: 1,
-      q:query
-      // bpm:120
-      // title: "stressed out"
-
-    })
-    .then(function(tracks){
-      deferred.resolve(tracks);
-    });
-    return deferred.promise;
   }
 
   function setupSoundCloud(){
