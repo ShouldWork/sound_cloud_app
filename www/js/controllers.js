@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('musicapp.controllers', [])
 
     .controller('ArtistCtrl', function($http,MusicService) {
         var vm = this;
