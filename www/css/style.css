@@ -134,3 +134,7 @@
 .color-white {
     color: white !important;
 }
+
+.orangeGrad{
+	background: linear-gradient(75deg,rgba(255,102,0,1),rgba(255,102,0,.50),rgba(255,102,0,.8));
+}

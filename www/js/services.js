@@ -1,4 +1,4 @@
-angular.module('starter').service('MusicService',MusicService);
+angular.module('musicapp').service('MusicService',MusicService);
 
 function MusicService($firebaseArray,$http,$q){
 	var service = this; 

@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('musicapp.controllers', [])
 
 .controller('ArtistCtrl', function($http,MusicService) {
   var vm = this;
@@ -63,7 +63,7 @@ angular.module('starter.controllers', [])
   vm.MusicService = MusicService; 
 })
 
-.controller('landingCtrl', function ($q,MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
+.controller('landingCtrl', function (loginService,$q,MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
   vm = this;
   vm.login = login;
   vm.showLogin = false;
@@ -73,7 +73,16 @@ angular.module('starter.controllers', [])
   vm.setupSoundCloud = MusicService.setupSoundCloud;
   vm.getTracks = MusicService.getTracks;
   vm.isEnter = isEnter; 
-  // vm.showResults = showResults; 
+  vm.signInProvider = signInProvider;
+
+
+  function signInProvider(){
+    console.log("signing in")
+    loginService.signIn('google').then(function(data){
+      $state.go('tab.artist');
+    })
+  }
+
 
   function isEnter(key){
     return MusicService.isEnter(key)
