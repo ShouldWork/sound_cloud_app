@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-angular.module('musicapp.controllers', [])
+angular.module('starter.controllers', [])
 
     .controller('ArtistCtrl', function($http,MusicService) {
         var vm = this;
@@ -42,7 +41,8 @@ angular.module('musicapp.controllers', [])
 
         function searchTrack(query,key){
             if (isEnter(key)){
-                MusicService.searchTrack(query).then(function(tracks){
+                vm.mySC.scInit();
+                vm.mySC.searchTrack(query).then(function(tracks){
                     vm.searchResults = tracks;
                 });
             }
@@ -84,109 +84,6 @@ angular.module('musicapp.controllers', [])
             var auth = $firebaseAuth();
 
             auth.$signInWithPopup(provider)
-=======
-angular.module('starter.controllers', [])
-
-.controller('ArtistCtrl', function($http,MusicService) {
-  var vm = this;
-  var showing = false; 
-  vm.getTracks = getTracks; 
-  vm.searchTrack = searchTrack; 
-  vm.isEnter = isEnter;
-  vm.embedSong = embedSong;
-  vm.streamSong = streamSong;
-  vm.streamPause = streamPause; 
-  vm.initCloud = MusicService.soundCloud.scInit();
-  vm.mySC = MusicService.soundCloud; 
-  vm.embededPlayer = false; 
-  vm.isStreaming = false; 
-
- function embedSong(song){
-     var container = document.getElementById('soundCloudWidget');
-     vm.embededPlayer = true; 
-     event.stopPropagation();
-     vm.mySC.embedSong(song,container);
- }
-
-
- function streamSong(song){
-
-  event.stopPropagation();
-  vm.mySC.scInit();
-  vm.mySC.streamSong(song);
-  vm.isStreaming = true; 
- }
-
- function streamPause(song){
-  vm.mySC.streamPause(song);
-  vm.isStreaming = false; 
- }
-
-  function isEnter(key){
-    return MusicService.isEnter(key)
-  }
-
-  function searchTrack(query,key){
-   if (isEnter(key)){
-      vm.mySC.scInit();
-      vm.mySC.searchTrack(query).then(function(tracks){
-        vm.searchResults = tracks; 
-      });
-    }
-  }
- 
-  function getTracks(){
-      vm.mySC.scInit();
-      vm.mySC.getTracks().then(function(tracks){
-      vm.searchResults = tracks;
-    });
-  }
-   getTracks();
-})
-
-.controller('callbackCtrl',function($timeout,MusicService){
-  vm = this; 
-  vm.close = MusicService.close;
-  vm.MusicService = MusicService; 
-})
-
-.controller('landingCtrl', function ($q,MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
-  vm = this;
-  vm.login = login;
-  vm.showLogin = false;
-  vm.loginWithEmail = loginWithEmail;
-  vm.showEmailLogin = showEmailLogin;
-  vm.logout = logout;
-  vm.setupSoundCloud = MusicService.setupSoundCloud;
-  vm.getTracks = MusicService.getTracks;
-  vm.isEnter = isEnter; 
-  // vm.showResults = showResults; 
-
-  function isEnter(key){
-    return MusicService.isEnter(key)
-  }
- 
-  function login(provider) {
-    console.log("I'm in login");
-    var auth = $firebaseAuth();
-
-    auth.$signInWithPopup(provider)
-        .then(loginSuccess)
-        .catch(loginError);
-  }
-
-  function showEmailLogin() {
-    vm.showLogin = !vm.showLogin;
-  }
-
-  function loginWithEmail(key) {
-    console.log(key + " " + isEnter(key))
-    if (isEnter(key)){
-      var auth = $firebaseAuth();
-      auth.$createUserWithEmailAndPassword(vm.email, vm.password)
-          .then(function () {
-            auth.$signInWithEmailAndPassword(vm.email, vm.password)
->>>>>>> 07c4dd7dacea7394d84781f46684d3654048680a
                 .then(loginSuccess)
                 .catch(loginError);
         }
