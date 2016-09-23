@@ -79,8 +79,7 @@ angular.module('musicapp.controllers', [])
 
 
       function signInProvider(){
-        //$log("signing in");
-        loginService.signIn('google').then(function(data){
+          loginService.signIn('google').then(function(data){
           $state.go('tab.artist');
         })
       }
@@ -130,11 +129,6 @@ angular.module('musicapp.controllers', [])
         vm.displayName = firebaseUser.user ? firebaseUser.user.displayName : firebaseUser.email;
         vm.showLogin = false;
         vm.password = undefined;
-
-
-
-
-
         vm.providerUser = firebaseUser.user;
         var ref = firebase.database().ref("users");
         var profileRef = ref.child(vm.providerUser.uid);
@@ -193,8 +187,75 @@ angular.module('musicapp.controllers', [])
      $scope.Songs = Songs.get($stateParams.songsId);
      })*/
 
-    .controller('AccountCtrl', function($scope) {
-        $scope.settings = {
-            enableFriends: true
+    .controller('AccountCtrl', function(loginService,$firebaseArray,$firebaseObject) {
+        var vm = this;
+        this.defaultSettings = {
+            enableFriends: true,
+            showSuggest: true,
+            embedPlayer: true,
+            streamPlayer: false
         };
-    });
+        vm.settings = loginService.settings;
+  })
+
+
+.controller('SongsCtrl', function($scope, Songs) {
+  // With the new view caching in Ionic, Controllers are only called
+  // when they are recreated or on app start, instead of every page change.
+  // To listen for when this page is active (for example, to refresh data),
+  // listen for the $ionicView.enter event:
+  //
+  //$scope.$on('$ionicView.enter', function(e) {
+  //});
+
+  /*$scope.songs = songs.all();
+  $scope.remove = function(songs) {
+    Songs.remove(songs);
+  };*/
+})
+
+/*.controller('SongsDetailCtrl', function($scope, $stateParams, Songs) {
+  $scope.Songs = Songs.get($stateParams.songsId);
+})*/
+
+.controller('AccountCtrl', function(loginService,$firebaseArray,$firebaseObject) {
+  var vm = this;
+  this.defaultSettings = {
+    enableFriends: true,
+    showSuggest: true,
+    embedPlayer: true,
+    streamPlayer: false
+  };
+  // vm.getUserSettings = getUserSettings(); 
+  vm.settings = loginService.settings; 
+
+  // function getUserSettings(){
+  //   loginService.getUserSettings().then(function(settings){
+  //     vm.settings = settings; 
+  //   });
+  // }
+});
+
+
+        // var dbSetting = $firebaseArray(settingRef);
+        // console.log(dbSetting);
+        // dbSetting.$loaded().then(function(){
+        //   settingRef.set({
+        //     enable_friends: true,
+        //     show_suggest: true,
+        //     embed_player: true,
+        //     stream_player: false
+        //   })
+        // })
+        // .then(function(settingRef){
+        //   console.log(dbSetting[0])
+        // });
+    
+        // When adding new infromation $add is good. For setting initial information ref.set is used
+        // dbSetting.$add({
+        //   enableFriends: true,
+        //   showSuggest: true,
+        //   embedPlayer: true,
+        //   streamPlayer: false
+        // })
+
