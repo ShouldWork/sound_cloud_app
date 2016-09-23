@@ -3,24 +3,25 @@
         .service('loginService',loginService);
 
 
-        function loginService($q,$firebaseArray,$firebaseAuth,$firebaseObject){
+        function loginService($q, $firebaseArray, $firebaseAuth, $firebaseObject, $log){
         	var ls = this;
+            var log = $log;
         	ls.signIn 	   = signIn;
         	ls.signOut	   = signOut;
         	ls.getTime	   = getTime;
         	// ls.signOut();
         	ls.isLoggedIn  = isLoggedIn();
         	ls.currentUser = setCurrentUser();
-            ls.authDataCheck = authDataCheck();
+            ls.authDataCheck = authDataCheck()
 
-            console.log(getTime());
+            log(getTime());
 
             function authDataCheck(){
                 firebase.auth().onAuthStateChanged(function(user){
                     if (user){
-                        console.log("user is " + user.displayName)
+                        log("user is " + user.displayName)
                     }else{
-                        console.log("failed")
+                        log("failed")
                     }
                 })
             }
@@ -37,7 +38,7 @@
                         today: getTime()
                     };
                     ls.isLoggedIn = true;
-                    // console.log(ls.currentUser) 
+                    // $log(ls.currentUser)
                 } else{
                     ls.currentUser = undefined;
                     ls.isLoggedIn = false; 
@@ -68,7 +69,7 @@
             	   ls.currentUser = undefined;
             	   ls.isLoggedIn = isLoggedIn();
                 }, function(error){
-                    console.log("An error occurred: " + error)
+                    $log("An error occurred: " + error)
                 })
         	}
 
@@ -81,7 +82,7 @@
 
                 setCurrentUser();
                 self.user = $firebaseObject(ref);
-                console.log(self.user);
+                log(self.user);
                 self.user.$loaded().then(function(){
                     ref.set({
                         displayName: user.displayName,
@@ -90,7 +91,7 @@
                         lastLogin: getTime(),
                         active: true
                     }).then(function(){
-                        console.log("User updated!",1500)
+                        $log("User updated!",1500)
                     })
                 })
         		deferred.resolve();
@@ -98,7 +99,7 @@
         	}
 
         	function loginError(error) {
-            	console.log("Authentication failed:", error);
+            	log("Authentication failed:", error);
         	}
 
         	function isLoggedIn(){

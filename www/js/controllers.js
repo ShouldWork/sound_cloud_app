@@ -1,7 +1,7 @@
 angular.module('musicapp.controllers', [])
 
 
-.controller('ArtistCtrl', function($http,MusicService) {
+.controller('ArtistCtrl', function($http,MusicService,$log) {
   var vm = this;
   var showing = false; 
   vm.getTracks = getTracks; 
@@ -66,6 +66,7 @@ angular.module('musicapp.controllers', [])
 
 .controller('landingCtrl', function (loginService,$q,MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
   vm = this;
+  $scope.$log = $log;
   vm.login = login;
   vm.showLogin = false;
   vm.loginWithEmail = loginWithEmail;
@@ -78,7 +79,7 @@ angular.module('musicapp.controllers', [])
 
 
       function signInProvider(){
-        console.log("signing in")
+        //$log("signing in");
         loginService.signIn('google').then(function(data){
           $state.go('tab.artist');
         })
@@ -90,7 +91,6 @@ angular.module('musicapp.controllers', [])
       }
 
       function login(provider) {
-        console.log("I'm in login");
         var auth = $firebaseAuth();
 
         auth.$signInWithPopup(provider)
@@ -104,7 +104,7 @@ angular.module('musicapp.controllers', [])
 
 
         function loginWithEmail(key) {
-            console.log(key + " " + isEnter(key))
+            $log(key + " " + isEnter(key));
             if (isEnter(key)){
                 var auth = $firebaseAuth();
                 auth.$createUserWithEmailAndPassword(vm.email, vm.password)

@@ -41,7 +41,7 @@ function MusicService($firebaseArray,$http,$q){
                 download: true,
                 show_playcount: true,
                 callback: function(){
-                    console.log("From the call back in the embedSong")
+                    $log("From the call back in the embedSong");
                 },
                 color: '#ff3a00',
             });
@@ -50,8 +50,8 @@ function MusicService($firebaseArray,$http,$q){
             SC.stream('tracks/' + song).then(function(player){
                 player.play();
                 service.player = player;
-                console.log(service.player)
-                console.log(service.player.controller._state)
+                $log(service.player);
+                $log(service.player.controller._state);
             });
         },
         streamPause: function(){
@@ -62,7 +62,7 @@ function MusicService($firebaseArray,$http,$q){
             // ie bitrate,duration,extension,issuedAt,protocol,and the url for the playing track
             player.pause();
             service.player = player;
-            console.log(service.player.controller._state)
+            $log(service.player.controller._state)
         },
         searchTrack: function(query){
             var deferred = $q.defer();
@@ -102,7 +102,7 @@ function MusicService($firebaseArray,$http,$q){
         SC.connect(function(response){
             sc.get("/me",function(response){
                 var data={};
-                console.log(response)
+                $log(response);
             })
         }).then(function(){
             return SC.get('/me');
@@ -128,7 +128,7 @@ function MusicService($firebaseArray,$http,$q){
         SC.connect(function(response){
             sc.get("/me",function(response){
                 var data={};
-                console.log(response)
+                $log(response);
             })
         }).then(function(){
             return SC.get('/me');
@@ -150,7 +150,7 @@ function MusicService($firebaseArray,$http,$q){
     }
 
     function close(){
-        console.log("Started")
+        $log("Started");
         window.setTimeout(window.opener.SC.connectCallback, 1);
     }
 
