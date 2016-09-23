@@ -100,7 +100,8 @@ var app = angular.module('musicapp', [
     views: {
       'tab-account': {
         templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+        controller: 'AccountCtrl',
+        controllerAs: 'vm'
       }
     }
   });

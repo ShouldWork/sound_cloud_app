@@ -65,13 +65,10 @@ angular.module('musicapp.controllers', [])
 
 .controller('landingCtrl', function (loginService,$q,MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
   vm = this;
-  vm.login = login;
   vm.showLogin = false;
   vm.loginWithEmail = loginWithEmail;
   vm.showEmailLogin = showEmailLogin;
   vm.logout = logout;
-  vm.setupSoundCloud = MusicService.setupSoundCloud;
-  vm.getTracks = MusicService.getTracks;
   vm.isEnter = isEnter; 
   vm.signInProvider = signInProvider;
 
@@ -86,15 +83,6 @@ angular.module('musicapp.controllers', [])
 
   function isEnter(key){
     return MusicService.isEnter(key)
-  }
- 
-  function login(provider) {
-    console.log("I'm in login");
-    var auth = $firebaseAuth();
-
-    auth.$signInWithPopup(provider)
-        .then(loginSuccess)
-        .catch(loginError);
   }
 
   function showEmailLogin() {
@@ -121,47 +109,6 @@ angular.module('musicapp.controllers', [])
           })
           .catch(loginError);
     }
-  }
-
-  function loginSuccess(firebaseUser) {
-    $log.log(firebaseUser);
-    vm.displayName = firebaseUser.user ? firebaseUser.user.displayName : firebaseUser.email;
-    vm.showLogin = false;
-    vm.password = undefined;
-
-
-
-
-
-    vm.providerUser = firebaseUser.user;
-    var ref = firebase.database().ref("users");
-    var profileRef = ref.child(vm.providerUser.uid);
-    vm.user = $firebaseObject(profileRef);
-    $log.log(vm.user);
-    $log.log(profileRef);
-    vm.user.$loaded().then(function () {
-      if (!vm.user.displayName) {
-        $log.log("creating user...");
-        profileRef.set({
-          displayName: vm.providerUser.displayName,
-          email: vm.providerUser.email,
-          photoURL: vm.providerUser.photoURL
-        }).then(function () {
-          $log.log("user created.");
-          $state.go('tab.artist');
-        }, function () {
-          $log.log("user could not be created.");
-        });
-      } else {
-        $log.log('user already created!');
-        $state.go('tab.artist');
-      }
-    });
-  }
-
-  function loginError(error) {
-    vm.loginError = error; 
-    $log.log("Authentication failed:", error);
   }
 
   function logout() {
@@ -199,14 +146,14 @@ angular.module('musicapp.controllers', [])
     embedPlayer: true,
     streamPlayer: false
   };
-  // vm.getUserSettings = getUserSettings(); 
-  vm.settings = loginService.settings; 
+  vm.getUserSettings = getUserSettings(); 
+  // vm.settings = loginService.settings; 
 
-  // function getUserSettings(){
-  //   loginService.getUserSettings().then(function(settings){
-  //     vm.settings = settings; 
-  //   });
-  // }
+  function getUserSettings(){
+    loginService.getUserSettings().then(function(settings){
+      vm.settings = settings; 
+    });
+  }
 });
 
 

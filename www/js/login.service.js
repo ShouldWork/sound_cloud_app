@@ -15,6 +15,12 @@
             ls.authDataCheck = authDataCheck;
             ls.getUserSettings = getUserSettings; 
 
+                log.info("information")
+                log.error("error")
+                log.debug("debug")
+                log.warn("warn")
+
+
             function authDataCheck(){
                 var deferred = $q.defer();
                 firebase.auth().onAuthStateChanged(function(user){
@@ -159,6 +165,7 @@
                                     embedPlayer: true,
                                     streamPlayer: false
                                 }
+                            deferred.resolve(this.settings) 
                             })
                         } else {
                             this.settings = {
@@ -167,8 +174,8 @@
                                 embedPlayer: settings.embed_player,
                                 streamPlayer: settings.stream_player
                             }
+                            deferred.resolve(this.settings) 
                         }
-                       deferred.resolve(this.settings) 
                     })
                 })
                 return deferred.promise; 
