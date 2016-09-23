@@ -34,9 +34,9 @@
 		<!-- Ioncard displaying search results -->
 		<div ng-repeat="detail in vm.searchResults" class="card-background-page animate-repeat" style="margin: 5px">
 			<div class="list">
-				<div ng-click="showing = (showing==true ? false : true)" style="background: #FF6600" class="item item-avatar">
+				<div ng-click="showing = (showing==true ? false : true)" class="item item-avatar orangeGrad">
 					<img ng-src="{{detail.user.avatar_url}}">
-					<h2 class="card-title" ng-href="{{ detail.user.permalink_url }}" ng-bind="detail.user.username"></h2>
+					<!-- <h2 class="card-title" ng-href="{{ detail.user.permalink_url }}" ng-bind="detail.user.username"></h2> -->
 					<h3 class="card-subtitle" ng-bind="detail.title" class="card-subtitle"></h3>
 					<button style="font-size: 2em; float: right" class="button button-outline button-icon ion-ios-play button-calm" ng-click="vm.embedSong(detail.id)"></button>
 

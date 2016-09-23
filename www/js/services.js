@@ -32,7 +32,7 @@ function MusicService($firebaseArray,$http,$q){
             SC.oEmbed('http://api.soundcloud.com/tracks/' + song,{
                 element: container,
                 auto_play: true,
-                maxheight: 166,
+                maxheight: 190,
                 sharing: false,
                 show_comments: true,
                 show_user: false,

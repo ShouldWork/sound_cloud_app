@@ -46,7 +46,7 @@
                     today: getTime()
                 };
                 ls.isLoggedIn = true;
-                // console.log(ls.currentUser)
+                // log(ls.currentUser)
             } else{
                 ls.currentUser = undefined;
                 ls.isLoggedIn = false;
@@ -159,25 +159,25 @@
                                 stream_player: false
                             })
                             .then(function(){
-                                this.settings = {
+                                ls.settings = {
                                     enableFriends: true,
                                     showSuggest: true,
                                     embedPlayer: true,
                                     streamPlayer: false
-                                }
-                                deferred.resolve(this.settings)
+                                };
+                                deferred.resolve(ls.settings)
                             })
                     } else {
-                        this.settings = {
+                        ls.settings = {
                             enableFriends: settings.enable_friends,
                             showSuggest: settings.show_suggest,
                             embedPlayer: settings.embed_player,
                             streamPlayer: settings.stream_player
-                        }
-                        deferred.resolve(this.settings)
+                        };
+                        deferred.resolve(ls.settings)
                     }
                 })
-            })
+            });
             return deferred.promise;
         }
 

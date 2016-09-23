@@ -37,9 +37,10 @@
   </head>
   <body ng-app="musicapp">
 
-    <div class="widgetContainer">
-       <button class="button ion-eye-disabled" ng-click="showingWidget = (showingWidget==true ? false : true)" style="font-size: 2em; background: transparent; position: absolute; bottom: 80px; right: 10px"></button>
-       <div ng-show="!showingWidget" class="animate-show" id="soundCloudWidget"></div>
+    <div  ng-class="{widgetContainerShow: !showingWidget}" class="widgetContainerHide">
+       <i ng-show="showingWidget" class="ion-stats-bars icon" ng-click="showingWidget = (showingWidget==true ? false : true)" style="font-size: 2em; background: transparent; position: absolute; bottom: 0; left: 0"></i>
+       <i ng-show="!showingWidget" class="ion-stats-bars" ng-click="showingWidget = (showingWidget==true ? false : true)" style="color: red; font-size: 2em; background: transparent; position: absolute; bottom: 0; left: 0"></i>
+       <div ng-show="!showingWidget"  id="soundCloudWidget"></div>
    </div>
       <!--
       The nav bar that will be updated as we navigate between views.
