@@ -1,8 +1,17 @@
 <ion-view view-title="Account" hide-nav-bar="true">
   <ion-content>
     <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
+    <ion-toggle  ng-model="$ctrl.settings.enableFriends">
+        Enable Friends {{$ctrl.settings.enableFriends}}
+    </ion-toggle>
+    <ion-toggle  ng-model="$ctrl.settings.embedPlayer">
+        Embed Music Player
+    </ion-toggle>
+    <ion-toggle  ng-model="$ctrl.settings.streamPlayer">
+        Stream Music Player
+    </ion-toggle>
+        <ion-toggle  ng-model="$ctrl.settings.showSuggest">
+        Show suggestions
     </ion-toggle>
     </ion-list>
   </ion-content>

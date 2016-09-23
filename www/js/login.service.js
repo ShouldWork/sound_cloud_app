@@ -2,27 +2,30 @@
     angular.module('musicapp')
         .service('loginService',loginService);
 
+        function loginService($q,$firebaseArray,$firebaseAuth,$firebaseObject,$log,$window){
 
-        function loginService($q,$firebaseArray,$firebaseAuth,$firebaseObject){
         	var ls = this;
+            var log = $log; 
         	ls.signIn 	   = signIn;
         	ls.signOut	   = signOut;
         	ls.getTime	   = getTime;
         	// ls.signOut();
         	ls.isLoggedIn  = isLoggedIn();
         	ls.currentUser = setCurrentUser();
-            ls.authDataCheck = authDataCheck();
-
-            console.log(getTime());
+            ls.authDataCheck = authDataCheck;
+            ls.getUserSettings = getUserSettings; 
 
             function authDataCheck(){
+                var deferred = $q.defer();
                 firebase.auth().onAuthStateChanged(function(user){
                     if (user){
-                        console.log("user is " + user.displayName)
+                        log.info("user is " + user.providerData[0].displayName)
+                        deferred.resolve(user)
                     }else{
-                        console.log("failed")
+                        log.error("failed")
                     }
                 })
+                return deferred.promise; 
             }
 
         	function setCurrentUser(){
@@ -47,7 +50,8 @@
         	function signIn(provider){
 	            var auth = $firebaseAuth();
 	            return auth.$signInWithPopup(provider)
-	            	.then(loginSuccess).then(function(){
+	            	.then(loginSuccess).then(function(data){
+
 	            		ls.isLoggedIn = isLoggedIn();
 	            	})
 	            	.catch(loginError);
@@ -57,8 +61,8 @@
                 var auth = $firebaseAuth();
         		var user = firebase.auth().currentUser;
                 var ref = firebase.database().ref('users/' + user.uid);
-                self.user = $firebaseObject(ref);
-                self.user.$loaded().then(function(){
+                ls.user = $firebaseObject(ref);
+                ls.user.$loaded().then(function(){
                     ref.update({
                         logoutTime: getTime(),
                         active: false
@@ -68,29 +72,31 @@
             	   ls.currentUser = undefined;
             	   ls.isLoggedIn = isLoggedIn();
                 }, function(error){
-                    console.log("An error occurred: " + error)
+                    log.error("An error occurred: " + error)
                 })
         	}
 
         	function loginSuccess(firebaseUser){
+ 
         		var deferred = $q.defer();
         		var	currentTime = getTime();
         		var	user = firebaseUser.user;
         		var	userProfile = user.uid;
                 var  ref = firebase.database().ref('users/' + userProfile);
-
+                console.log(user.providerData[0].displayName)
                 setCurrentUser();
-                self.user = $firebaseObject(ref);
-                console.log(self.user);
-                self.user.$loaded().then(function(){
+                ls.user = $firebaseObject(ref);
+                // log.info(ls.user);
+                ls.user.$loaded().then(function(){
                     ref.set({
                         displayName: user.displayName,
                         email: user.email,
                         photoURL: user.photoURL,
                         lastLogin: getTime(),
-                        active: true
+                        active: true,
+                        uid: user.uid
                     }).then(function(){
-                        console.log("User updated!",1500)
+                        log.info("User updated!")
                     })
                 })
         		deferred.resolve();
@@ -98,7 +104,7 @@
         	}
 
         	function loginError(error) {
-            	console.log("Authentication failed:", error);
+            	log.error("Authentication failed:", error);
         	}
 
         	function isLoggedIn(){
@@ -130,6 +136,43 @@
 
                 dateObject = month + "/" + day + "/" + year + " " + hour + ":" + min + ":" + sec;
                 return dateObject
-        	}     
+        	}
+
+            function getUserSettings(){
+                var deferred = $q.defer();
+                ls.authDataCheck().then(function(user){
+                    var settingRef = firebase.database().ref().child('user_information/').child(user.uid);
+                    var objectSetting = $firebaseObject(settingRef);
+                    objectSetting.$loaded().then(function(){
+                        var settings = objectSetting;
+                        if (settings.enable_friends === undefined){
+                                settingRef.set({
+                                enable_friends: true,
+                                show_suggest: true,
+                                embed_player: true,
+                                stream_player: false
+                            })
+                            .then(function(){
+                                this.settings = {
+                                    enableFriends: true,
+                                    showSuggest: true,
+                                    embedPlayer: true,
+                                    streamPlayer: false
+                                }
+                            })
+                        } else {
+                            this.settings = {
+                                enableFriends: settings.enable_friends,
+                                showSuggest: settings.show_suggest,
+                                embedPlayer: settings.embed_player,
+                                streamPlayer: settings.stream_player
+                            }
+                        }
+                       deferred.resolve(this.settings) 
+                    })
+                })
+                return deferred.promise; 
+            }
+
         }
 }());

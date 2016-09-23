@@ -191,8 +191,43 @@ angular.module('musicapp.controllers', [])
   $scope.Songs = Songs.get($stateParams.songsId);
 })*/
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
+.controller('AccountCtrl', function(loginService,$firebaseArray,$firebaseObject) {
+  var vm = this;
+  this.defaultSettings = {
+    enableFriends: true,
+    showSuggest: true,
+    embedPlayer: true,
+    streamPlayer: false
   };
+  // vm.getUserSettings = getUserSettings(); 
+  vm.settings = loginService.settings; 
+
+  // function getUserSettings(){
+  //   loginService.getUserSettings().then(function(settings){
+  //     vm.settings = settings; 
+  //   });
+  // }
 });
+
+
+        // var dbSetting = $firebaseArray(settingRef);
+        // console.log(dbSetting);
+        // dbSetting.$loaded().then(function(){
+        //   settingRef.set({
+        //     enable_friends: true,
+        //     show_suggest: true,
+        //     embed_player: true,
+        //     stream_player: false
+        //   })
+        // })
+        // .then(function(settingRef){
+        //   console.log(dbSetting[0])
+        // });
+    
+        // When adding new infromation $add is good. For setting initial information ref.set is used
+        // dbSetting.$add({
+        //   enableFriends: true,
+        //   showSuggest: true,
+        //   embedPlayer: true,
+        //   streamPlayer: false
+        // })
