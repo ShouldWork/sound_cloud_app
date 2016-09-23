@@ -66,14 +66,11 @@ angular.module('musicapp.controllers', [])
 
 .controller('landingCtrl', function (loginService,$q,MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
   vm = this;
-  $scope.$log = $log;
   vm.login = login;
   vm.showLogin = false;
   vm.loginWithEmail = loginWithEmail;
   vm.showEmailLogin = showEmailLogin;
   vm.logout = logout;
-  vm.setupSoundCloud = MusicService.setupSoundCloud;
-  vm.getTracks = MusicService.getTracks;
   vm.isEnter = isEnter; 
   vm.signInProvider = signInProvider;
 
@@ -91,6 +88,7 @@ angular.module('musicapp.controllers', [])
 
       function login(provider) {
         var auth = $firebaseAuth();
+
 
         auth.$signInWithPopup(provider)
             .then(loginSuccess)
@@ -154,6 +152,7 @@ angular.module('musicapp.controllers', [])
             }
         });
     }
+
 
     function loginError(error) {
         vm.loginError = error;
@@ -226,14 +225,14 @@ angular.module('musicapp.controllers', [])
     embedPlayer: true,
     streamPlayer: false
   };
-  // vm.getUserSettings = getUserSettings(); 
-  vm.settings = loginService.settings; 
+  vm.getUserSettings = getUserSettings(); 
+  // vm.settings = loginService.settings; 
 
-  // function getUserSettings(){
-  //   loginService.getUserSettings().then(function(settings){
-  //     vm.settings = settings; 
-  //   });
-  // }
+  function getUserSettings(){
+    loginService.getUserSettings().then(function(settings){
+      vm.settings = settings; 
+    });
+  }
 });
 
 
