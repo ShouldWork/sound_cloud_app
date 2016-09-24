@@ -186,52 +186,37 @@ angular.module('musicapp.controllers', [])
      $scope.Songs = Songs.get($stateParams.songsId);
      })*/
 
-    .controller('AccountCtrl', function(loginService,$firebaseArray,$firebaseObject) {
-        var vm = this;
-        this.defaultSettings = {
-            enableFriends: true,
-            showSuggest: true,
-            embedPlayer: true,
-            streamPlayer: false
-        };
-        vm.settings = loginService.settings;
-  })
+    // .controller('AccountCtrl', function(loginService,$firebaseArray,$firebaseObject) {
+    //     var vm = this;
+    //     this.defaultSettings = {
+    //         enableFriends: true,
+    //         showSuggest: true,
+    //         embedPlayer: true,
+    //         streamPlayer: false
+    //     };
+    //     vm.settings = loginService.settings;
+    //  })
+
+    .controller('AccountCtrl', function($scope,loginService,$firebaseArray,$firebaseObject) {
+      var vm = this;
+      this.defaultSettings = {
+        enableFriends: true,
+        showSuggest: true,
+        embedPlayer: true,
+        streamPlayer: false
+      };
+      vm.getUserSettings = getUserSettings;
+      // vm.settings = loginService.settings; 
+
+      $scope.$on('$ionicView.enter',function(e){
+        getUserSettings(); 
+      });
 
 
-.controller('SongsCtrl', function($scope, Songs) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  /*$scope.songs = songs.all();
-  $scope.remove = function(songs) {
-    Songs.remove(songs);
-  };*/
-})
-
-/*.controller('SongsDetailCtrl', function($scope, $stateParams, Songs) {
-  $scope.Songs = Songs.get($stateParams.songsId);
-})*/
-
-.controller('AccountCtrl', function(loginService,$firebaseArray,$firebaseObject) {
-  var vm = this;
-  this.defaultSettings = {
-    enableFriends: true,
-    showSuggest: true,
-    embedPlayer: true,
-    streamPlayer: false
-  };
-  vm.getUserSettings = getUserSettings(); 
-  // vm.settings = loginService.settings; 
-
-  function getUserSettings(){
-    loginService.getUserSettings().then(function(settings){
-      vm.settings = settings; 
-    });
+      function getUserSettings(){
+        loginService.getUserSettings().then(function(settings){
+          vm.settings = settings; 
+        });
   }
 });
 

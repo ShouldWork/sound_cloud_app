@@ -102,9 +102,9 @@
                     active: true,
                     uid: user.uid
                 }).then(function(){
-                    log.info("User updated!")
                 })
             })
+            ls.getUserSettings()
             deferred.resolve();
             return deferred.promise;
         }

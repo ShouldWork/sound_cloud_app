@@ -95,25 +95,24 @@
     background: green;
 }
 
-
-
-.widgetContainerHide{
+.widgetContainer{
     position: absolute;
     z-index: 10;
-    width: 50px;
-    height: 50px;
-    bottom: 50px;
     overflow: hidden;
-    padding: 0;
-    transition: all .25s ease-in;
-    /*border: 2px solid black;*/
-    /*background: green;*/
+    bottom: 47px;
+    min-width: 50px;
+    min-height: 50px;
+}
+
+.widgetContainerHide{
+    min-width: 50px;
+    height: 50px;
+    transition: all .5s ease-in;
 }
 
 .widgetContainerShow{
-    width: 100vw;
+    min-width: 100vw;
     height: 170px;
-    bottom: 47px;
 }
 
 .color-white {
