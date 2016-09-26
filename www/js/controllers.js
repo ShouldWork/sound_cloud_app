@@ -167,7 +167,18 @@ angular.module('musicapp.controllers', [])
     }
     })
 
-    .controller('SongsCtrl', function($scope, Songs) {
+    .controller('SongsCtrl', function($scope, bandsintown,$log) {
+      var song = this; 
+      song.getResults = getResults();
+
+
+      function getResults(){
+        $log.info("Getting results");
+        song.resultsBand = bandsintown.resultsBand; 
+        song.resultsVenue= bandsintown.resultsVenue; 
+        // $log.debug(song.results)
+      }
+
         // With the new view caching in Ionic, Controllers are only called
         // when they are recreated or on app start, instead of every page change.
         // To listen for when this page is active (for example, to refresh data),
@@ -185,17 +196,6 @@ angular.module('musicapp.controllers', [])
     /*.controller('SongsDetailCtrl', function($scope, $stateParams, Songs) {
      $scope.Songs = Songs.get($stateParams.songsId);
      })*/
-
-    // .controller('AccountCtrl', function(loginService,$firebaseArray,$firebaseObject) {
-    //     var vm = this;
-    //     this.defaultSettings = {
-    //         enableFriends: true,
-    //         showSuggest: true,
-    //         embedPlayer: true,
-    //         streamPlayer: false
-    //     };
-    //     vm.settings = loginService.settings;
-    //  })
 
     .controller('AccountCtrl', function($scope,loginService,$firebaseArray,$firebaseObject) {
       var vm = this;

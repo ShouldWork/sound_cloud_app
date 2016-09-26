@@ -1,11 +1,32 @@
-<ion-view view-title="Songs" hide-nav-bar="true">
+<ion-view view-title="Concerts" hide-nav-bar="true">
   <ion-content class="padding">
-    <h2>Welcome to MusicAppr</h2>
+    <h2>Concerts</h2>
     <h5>
-      Put a search bar
+      stuff
     </h5><br>
     <h5>
-      Display random list of songs from spotify api
+      Display random concerts from bandsintown API
     </h5>
+
+    <!-- <button ng-click="vm.getResults()">Results</button> -->
+    <div ng-repeat="results in vm.resultsBand">
+    	<div class="orangeGrad padding">
+    		<h2> {{results.name}} </h2>
+        <h3> Upcoming Events: {{results.upcoming_events_count}} </h3>
+    	</div>
+    </div>
+
+    <div ng-repeat="venue in vm.resultsVenue">
+      <div class="orangeGrad padding">
+        <h2> {{venue.title}} </h2>
+        <h3> {{venue.formatted_datetime}} </h3>
+        <h4> {{venue.formatted_location}} </h4>
+        <h4> {{venue.venue.name}} </h4>
+        <div >
+           <h2> artist: {{venue.artists.name}} </h2>
+           <img ng-src="{{artist.image_url}}"/> 
+        </div>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

@@ -81,7 +81,8 @@ var app = angular.module('musicapp', [
       views: {
         'tab-songs': {
           templateUrl: 'templates/tab-songs.html',
-          controller: 'SongsCtrl'
+          controller: 'SongsCtrl',
+          controllerAs: 'vm'
         }
       }
     })
