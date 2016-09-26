@@ -6,7 +6,7 @@
     function bandsintown($http,$log){
     	// Simple GET request example:
     var band = this; 
-    band.getBand = getBand; 
+    band.getBand = getBand(); 
     band.resultsBand =[{
 					  "name": "Damian Marley",
 					  "image_url": "http://www.bandsintown.com/DamianMarley/photo/medium.jpg",
@@ -48,9 +48,13 @@
 					}];
 	    
 	    function getBand(){
+	    	var url = 'http://api.bandsintown.com/artists/' + 'Skrillex' + '.json?api_version=2.0&app_id=musicapp_matc'
+
+
 			$http({
 			  method: 'GET',
-			  url: 'http://api.bandsintown.com/artists/Skrillex.json?app_id=musicapp_matc'
+			  dataType: 'jsonp',
+			  url: url
 			})
 			.then(function successCallback(response) {
 				$log.info(response);
