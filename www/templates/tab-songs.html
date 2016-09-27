@@ -1,32 +1,54 @@
 <ion-view view-title="Concerts" hide-nav-bar="true">
   <ion-content class="padding">
-    <h2>Concerts</h2>
-    <h5>
-      stuff
-    </h5><br>
-    <h5>
-      Display random concerts from bandsintown API
-    </h5>
 
     <!-- <button ng-click="vm.getResults()">Results</button> -->
-    <div ng-repeat="results in vm.resultsBand">
-    	<div class="orangeGrad padding">
-    		<h2> {{results.name}} </h2>
-        <h3> Upcoming Events: {{results.upcoming_events_count}} </h3>
-    	</div>
+    <!-- <div ng-repeat="results in vm.resultsBand"> -->
+<!--     	<div class="orangeGrad padding">
+    		<h1> {{vm.resultsBand.name}} </h2>
+        <h4> Upcoming Events: {{vm.resultsBand.upcoming_event_count}} </h3>
+    	</div> -->
+    <!-- </div> -->
+    <div class="list list-inset">
+      <label style="float: left; width:  75%" class="item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input style="font-size: 2em;" type="text" placeholder="Search" ng-model="searchQuery" ng-keypress="vm.getResults(searchQuery,$event)">
+        <!-- <button class="button icon ion-gear-a"></button> -->
+      </label>
+      <button style="margin-right: 5px; float: right" class="button button-icon button-outline ion-search button-balanced" type="submit" ng-click="vm.getResults(searchQuery)">Search</button>
     </div>
 
-    <div ng-repeat="venue in vm.resultsVenue">
-      <div class="orangeGrad padding">
-        <h2> {{venue.title}} </h2>
-        <h3> {{venue.formatted_datetime}} </h3>
-        <h4> {{venue.formatted_location}} </h4>
-        <h4> {{venue.venue.name}} </h4>
-        <div ng-repeat = "artist in venue.artists">
-           <h2> artist: {{artist.name}} </h2>
-           <img ng-src="{{artist.image_url}}"/> 
-        </div>
+    <!-- Results -->
+<!--     <div class="padding">
+      <h1>{{vm.resultsBand[0].artists[0].name | uppercase}}</h1>
+      <div id="eventsFound" class="animate-repeat orangeGrad padding" ng-repeat="venue in vm.resultsBand" style="border-bottom: 2px solid ghostWhite">
+        <h3>{{venue.formatted_location}}</h4>
+        <h4>Venue: {{venue.title}}</h3> 
+        <h4>When: {{venue.formatted_datetime}}</h4>
+        <h4 ng-href="{{venue.ticket_url}}">Seats: {{venue.ticket_status}}</h4>
       </div>
+    </div> -->
+
+    <div class="list" ng-repeat="venue in vm.resultsBand">
+      <a class="item item-thumbnail-left orangeGrad">
+        <img ng-src="{{vm.resultsBand[0].artists[0].thumb_url}}"/>
+        <h2 class="padding">{{venue.title}}</h2>
+        <h3 class="padding">{{venue.formatted_location}}</h2>
+      </a>
     </div>
   </ion-content>
 </ion-view>
+
+
+
+<!--       <div ng-repeat="venue in vm.resultsVenue">
+        <div>
+          <h2> {{venue.title}} </h2>
+          <h3> {{venue.formatted_datetime}} </h3>
+          <h4> {{venue.formatted_location}} </h4>
+          <h4> {{venue.venue.name}} </h4>
+          <div >
+             <h2> artist: {{venue.artists.name}} </h2>
+             <img ng-src="{{artist.image_url}}"/> 
+          </div>
+        </div>
+      </div> -->
