@@ -96,23 +96,20 @@
 }
 
 .widgetContainer{
-    position: absolute;
     z-index: 10;
     overflow: hidden;
-    bottom: 47px;
-    min-width: 50px;
-    min-height: 50px;
+    min-width: 100vw;
+    background: linear-gradient(34deg,rgba(0,0,0,0.40),transparent,transparent,rgba(0,0,0,0.10));
+    height: 80px;
 }
 
 .widgetContainerHide{
-    min-width: 50px;
-    height: 50px;
+    height: 100px;
     transition: all .5s ease-in;
 }
 
 .widgetContainerShow{
     min-width: 100vw;
-    height: 170px;
 }
 
 .color-white {
@@ -120,5 +117,5 @@
 }
 
 .orangeGrad{
-	background: linear-gradient(75deg,rgba(255,102,0,1),rgba(255,102,0,.50),rgba(255,102,0,.8));
+	background: linear-gradient(35deg,rgba(255,102,0,1),rgba(255,102,0,.50),rgba(255,102,0,.8));
 }

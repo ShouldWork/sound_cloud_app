@@ -12,12 +12,14 @@ angular.module('musicapp.controllers', [])
   vm.streamPause = streamPause; 
   vm.initCloud = MusicService.soundCloud.scInit();
   vm.mySC = MusicService.soundCloud; 
-  vm.embededPlayer = false; 
+  vm.showingWidget = true; 
   vm.isStreaming = false; 
 
  function embedSong(song){
+  console.log("Embed song")
      var container = document.getElementById('soundCloudWidget');
-     vm.embededPlayer = true; 
+     $log.info(container);
+     vm.showingWidget = true; 
      event.stopPropagation();
      vm.mySC.embedSong(song,container);
  }

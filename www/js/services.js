@@ -29,10 +29,11 @@ function MusicService($firebaseArray,$http,$q){
             return deferred.promise
         },
         embedSong: function(song,container){
+            console.log("Service embed song " + song + " container: " + container )
             SC.oEmbed('http://api.soundcloud.com/tracks/' + song,{
                 element: container,
                 auto_play: true,
-                maxheight: 190,
+                maxheight: 100,
                 sharing: false,
                 show_comments: true,
                 show_user: false,
@@ -41,7 +42,7 @@ function MusicService($firebaseArray,$http,$q){
                 download: true,
                 show_playcount: true,
                 callback: function(){
-                    $log("From the call back in the embedSong");
+                    $log.info("From the call back in the embedSong");
                 },
                 color: '#ff3a00',
             });
@@ -50,8 +51,8 @@ function MusicService($firebaseArray,$http,$q){
             SC.stream('tracks/' + song).then(function(player){
                 player.play();
                 service.player = player;
-                $log(service.player);
-                $log(service.player.controller._state);
+                $log.info(service.player);
+                $log.info(service.player.controller._state);
             });
         },
         streamPause: function(){
@@ -62,7 +63,7 @@ function MusicService($firebaseArray,$http,$q){
             // ie bitrate,duration,extension,issuedAt,protocol,and the url for the playing track
             player.pause();
             service.player = player;
-            $log(service.player.controller._state)
+            $log.info(service.player.controller._state)
         },
         searchTrack: function(query){
             var deferred = $q.defer();
