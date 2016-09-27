@@ -63,7 +63,7 @@
 	 <div ng-class="{widgetShow: showingWidget,streamSbow: streamShow}" class="widgetContainer">
      <!--   <i ng-show="showingWidget" class="ion-stats-bars icon" ng-click="showingWidget = (showingWidget==true ? false : true)" style="font-size: 2em; background: transparent;"></i>
        <i ng-show="!showingWidget" class="ion-stats-bars" ng-click="showingWidget = (showingWidget==true ? false : true)" style="color: red; font-size: 2em; background: transparent;"></i> -->
-	   <button  ng-show="vm.isStreaming" style="font-size: 2em; margin-left: 5px" class="button button-outline button-icon ion-ios-pause button-assertive animate-show" ng-click="vm.streamPause(detail.id)"></button>
+	   <button  ng-show="vm.isStreaming" class="button button-outline button-icon ion-ios-pause button-assertive animate-show" ng-click="vm.streamPause(detail.id)"></button>
        <div ng-show="vm.showingWidget"  id="soundCloudWidget"></div>
    	</div>
 	</ion-content>

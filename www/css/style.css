@@ -98,7 +98,7 @@
 .widgetContainer{
     z-index: 10;
     overflow: hidden;
-    min-width: 100vw;
+    min-width: 90vw;
     background: linear-gradient(34deg,rgba(0,0,0,0.40),transparent,transparent,rgba(0,0,0,0.10));
     height: 80px;
 }
@@ -109,7 +109,7 @@
 }
 
 .widgetContainerShow{
-    min-width: 100vw;
+    width: 90vw;    
 }
 
 .color-white {

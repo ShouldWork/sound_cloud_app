@@ -15,12 +15,6 @@
         ls.authDataCheck = authDataCheck;
         ls.getUserSettings = getUserSettings;
 
-        log.info("information")
-        log.error("error")
-        log.debug("debug")
-        log.warn("warn")
-
-
         function authDataCheck(){
             var deferred = $q.defer();
             firebase.auth().onAuthStateChanged(function(user){
@@ -145,40 +139,50 @@
         }
 
         function getUserSettings(){
-            var deferred = $q.defer();
+            var deferred = $q.defer(); 
             ls.authDataCheck().then(function(user){
-                var settingRef = firebase.database().ref().child('user_information/').child(user.uid);
-                var objectSetting = $firebaseObject(settingRef);
-                objectSetting.$loaded().then(function(){
-                    var settings = objectSetting;
-                    if (settings.enable_friends === undefined){
-                        settingRef.set({
-                                enable_friends: true,
-                                show_suggest: true,
-                                embed_player: true,
-                                stream_player: false
-                            })
-                            .then(function(){
-                                ls.settings = {
-                                    enableFriends: true,
-                                    showSuggest: true,
-                                    embedPlayer: true,
-                                    streamPlayer: false
-                                };
-                                deferred.resolve(ls.settings)
-                            })
-                    } else {
-                        ls.settings = {
-                            enableFriends: settings.enable_friends,
-                            showSuggest: settings.show_suggest,
-                            embedPlayer: settings.embed_player,
-                            streamPlayer: settings.stream_player
-                        };
-                        deferred.resolve(ls.settings)
-                    }
-                })
-            });
-            return deferred.promise;
+                var ref = firebase.database().ref().child('user_information/').child(user.uid);
+                ls.settings = $firebaseArray(ref);
+                deferred.resolve(ls.settings);
+            })
+            return deferred.promise; 
+    
+
+            // var deferred = $q.defer();
+            // ls.authDataCheck().then(function(user){
+            //     var settingRef = firebase.database().ref().child('user_information/').child(user.uid);
+            //     var objectSetting = $firebaseObject(settingRef);
+            //     objectSetting.$loaded().then(function(){
+            //         var settings = objectSetting;
+            //         if (settings.enable_friends === undefined){
+            //             settingRef.set({
+            //                     enable_friends: true,
+            //                     show_suggest: true,
+            //                     embed_player: true,
+            //                     stream_player: false
+            //                 })
+            //                 .then(function(){
+            //                     ls.settings = {
+            //                         enableFriends: true,
+            //                         showSuggest: true,
+            //                         embedPlayer: true,
+            //                         streamPlayer: false
+            //                     };
+            //                     deferred.resolve(ls.settings)
+            //                 })
+            //         } else {
+            //             // ls.settings = {
+            //             //     enableFriends: settings.enable_friends,
+            //             //     showSuggest: settings.show_suggest,
+            //             //     embedPlayer: settings.embed_player,
+            //             //     streamPlayer: settings.stream_player
+            //             // };
+            //             ls.settings = objectSetting;
+            //             deferred.resolve(ls.settings)
+            //         }
+            //     })
+            // });
+            // return deferred.promise;
         }
 
     }

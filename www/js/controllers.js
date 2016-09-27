@@ -1,7 +1,7 @@
 angular.module('musicapp.controllers', [])
 
 
-.controller('ArtistCtrl', function($http,MusicService,$log) {
+.controller('ArtistCtrl', function($http,MusicService,$log,loginService,$scope) {
   var vm = this;
   var showing = false; 
   vm.getTracks = getTracks; 
@@ -12,8 +12,24 @@ angular.module('musicapp.controllers', [])
   vm.streamPause = streamPause; 
   vm.initCloud = MusicService.soundCloud.scInit();
   vm.mySC = MusicService.soundCloud; 
-  vm.showingWidget = true; 
-  vm.isStreaming = false; 
+  vm.getUserSettings = getUserSettings;
+
+
+  $scope.$on('$ionicView.enter',function(e){
+    getUserSettings(); 
+  });
+
+
+  function getUserSettings(){
+    loginService.getUserSettings().then(function(settings){
+      $log.info(settings)
+
+      vm.showingWidget = settings.embedPlayer;
+      vm.isStreaming = settings.streamPlayer; 
+    });
+  } 
+
+
 
  function embedSong(song){
   console.log("Embed song")
@@ -124,43 +140,6 @@ angular.module('musicapp.controllers', [])
             }
         }
 
-    // function loginSuccess(firebaseUser) {
-    //     $log.log(firebaseUser);
-    //     vm.displayName = firebaseUser.user ? firebaseUser.user.displayName : firebaseUser.email;
-    //     vm.showLogin = false;
-    //     vm.password = undefined;
-    //     vm.providerUser = firebaseUser.user;
-    //     var ref = firebase.database().ref("users");
-    //     var profileRef = ref.child(vm.providerUser.uid);
-    //     vm.user = $firebaseObject(profileRef);
-    //     $log.log(vm.user);
-    //     $log.log(profileRef);
-    //     vm.user.$loaded().then(function () {
-    //         if (!vm.user.displayName) {
-    //             $log.log("creating user...");
-    //             profileRef.set({
-    //                 displayName: vm.providerUser.displayName,
-    //                 email: vm.providerUser.email,
-    //                 photoURL: vm.providerUser.photoURL
-    //             }).then(function () {
-    //                 $log.log("user created.");
-    //                 $state.go('tab.artist');
-    //             }, function () {
-    //                 $log.log("user could not be created.");
-    //             });
-    //         } else {
-    //             $log.log('user already created!');
-    //             $state.go('tab.artist');
-    //         }
-    //     });
-    // }
-
-
-    // function loginError(error) {
-    //     vm.loginError = error;
-    //     $log.log("Authentication failed:", error);
-    // }
-
     function logout() {
         var auth = $firebaseAuth();
         $log.log(vm.displayName + " logged out");
@@ -207,14 +186,7 @@ angular.module('musicapp.controllers', [])
 
     .controller('AccountCtrl', function($scope,loginService,$firebaseArray,$firebaseObject) {
       var vm = this;
-      this.defaultSettings = {
-        enableFriends: true,
-        showSuggest: true,
-        embedPlayer: true,
-        streamPlayer: false
-      };
       vm.getUserSettings = getUserSettings;
-      // vm.settings = loginService.settings; 
 
       $scope.$on('$ionicView.enter',function(e){
         getUserSettings(); 
@@ -227,27 +199,4 @@ angular.module('musicapp.controllers', [])
         });
   }
 });
-
-
-        // var dbSetting = $firebaseArray(settingRef);
-        // console.log(dbSetting);
-        // dbSetting.$loaded().then(function(){
-        //   settingRef.set({
-        //     enable_friends: true,
-        //     show_suggest: true,
-        //     embed_player: true,
-        //     stream_player: false
-        //   })
-        // })
-        // .then(function(settingRef){
-        //   console.log(dbSetting[0])
-        // });
-    
-        // When adding new infromation $add is good. For setting initial information ref.set is used
-        // dbSetting.$add({
-        //   enableFriends: true,
-        //   showSuggest: true,
-        //   embedPlayer: true,
-        //   streamPlayer: false
-        // })
 
