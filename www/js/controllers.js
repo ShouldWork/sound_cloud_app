@@ -122,42 +122,42 @@ angular.module('musicapp.controllers', [])
             }
         }
 
-    function loginSuccess(firebaseUser) {
-        $log.log(firebaseUser);
-        vm.displayName = firebaseUser.user ? firebaseUser.user.displayName : firebaseUser.email;
-        vm.showLogin = false;
-        vm.password = undefined;
-        vm.providerUser = firebaseUser.user;
-        var ref = firebase.database().ref("users");
-        var profileRef = ref.child(vm.providerUser.uid);
-        vm.user = $firebaseObject(profileRef);
-        $log.log(vm.user);
-        $log.log(profileRef);
-        vm.user.$loaded().then(function () {
-            if (!vm.user.displayName) {
-                $log.log("creating user...");
-                profileRef.set({
-                    displayName: vm.providerUser.displayName,
-                    email: vm.providerUser.email,
-                    photoURL: vm.providerUser.photoURL
-                }).then(function () {
-                    $log.log("user created.");
-                    $state.go('tab.artist');
-                }, function () {
-                    $log.log("user could not be created.");
-                });
-            } else {
-                $log.log('user already created!');
-                $state.go('tab.artist');
-            }
-        });
-    }
+    // function loginSuccess(firebaseUser) {
+    //     $log.log(firebaseUser);
+    //     vm.displayName = firebaseUser.user ? firebaseUser.user.displayName : firebaseUser.email;
+    //     vm.showLogin = false;
+    //     vm.password = undefined;
+    //     vm.providerUser = firebaseUser.user;
+    //     var ref = firebase.database().ref("users");
+    //     var profileRef = ref.child(vm.providerUser.uid);
+    //     vm.user = $firebaseObject(profileRef);
+    //     $log.log(vm.user);
+    //     $log.log(profileRef);
+    //     vm.user.$loaded().then(function () {
+    //         if (!vm.user.displayName) {
+    //             $log.log("creating user...");
+    //             profileRef.set({
+    //                 displayName: vm.providerUser.displayName,
+    //                 email: vm.providerUser.email,
+    //                 photoURL: vm.providerUser.photoURL
+    //             }).then(function () {
+    //                 $log.log("user created.");
+    //                 $state.go('tab.artist');
+    //             }, function () {
+    //                 $log.log("user could not be created.");
+    //             });
+    //         } else {
+    //             $log.log('user already created!');
+    //             $state.go('tab.artist');
+    //         }
+    //     });
+    // }
 
 
-    function loginError(error) {
-        vm.loginError = error;
-        $log.log("Authentication failed:", error);
-    }
+    // function loginError(error) {
+    //     vm.loginError = error;
+    //     $log.log("Authentication failed:", error);
+    // }
 
     function logout() {
         var auth = $firebaseAuth();
@@ -167,16 +167,22 @@ angular.module('musicapp.controllers', [])
     }
     })
 
-    .controller('SongsCtrl', function($scope, bandsintown,$log) {
+    .controller('SongsCtrl', function($scope, bandsintown,$log,MusicService) {
       var song = this; 
-      song.getResults = getResults();
+      song.getResults = getResults;
+      song.isEnter = isEnter; 
 
-
-      function getResults(){
-        $log.info("Getting results");
-        song.resultsBand = bandsintown.resultsBand; 
-        song.resultsVenue= bandsintown.resultsVenue; 
-        // $log.debug(song.results)
+      function isEnter(key){
+        return MusicService.isEnter(key)
+      }
+      function getResults(query,key){
+        if(isEnter(key)){
+          $log.info("Getting results");
+          bandsintown.getBand(query).then(function(response){
+             song.resultsBand = response; 
+             $log.info(song.resultsBand)
+          })
+        }
       }
 
         // With the new view caching in Ionic, Controllers are only called
