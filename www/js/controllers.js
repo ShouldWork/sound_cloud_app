@@ -87,7 +87,6 @@ angular.module('musicapp.controllers', [])
   vm.showLogin = false;
   vm.loginWithEmail = loginWithEmail;
   vm.showEmailLogin = showEmailLogin;
-  vm.logout = logout;
   vm.isEnter = isEnter; 
   vm.signInProvider = signInProvider;
 
@@ -129,15 +128,7 @@ angular.module('musicapp.controllers', [])
                     .catch(loginError);
             }
         }
-
-    function logout() {
-        var auth = $firebaseAuth();
-        $log.log(vm.displayName + " logged out");
-        auth.$signOut();
-        vm.displayName = undefined;
-    }
-    })
-
+      })
     .controller('SongsCtrl', function($scope, bandsintown,$log,MusicService) {
       var song = this; 
       song.getResults = getResults;
@@ -155,25 +146,7 @@ angular.module('musicapp.controllers', [])
           })
         }
       }
-
-        // With the new view caching in Ionic, Controllers are only called
-        // when they are recreated or on app start, instead of every page change.
-        // To listen for when this page is active (for example, to refresh data),
-        // listen for the $ionicView.enter event:
-        //
-        //$scope.$on('$ionicView.enter', function(e) {
-        //});
-
-        /*$scope.songs = songs.all();
-         $scope.remove = function(songs) {
-         Songs.remove(songs);
-         };*/
     })
-
-    /*.controller('SongsDetailCtrl', function($scope, $stateParams, Songs) {
-     $scope.Songs = Songs.get($stateParams.songsId);
-     })*/
-
     .controller('AccountCtrl', function($scope,loginService,$firebaseArray,$firebaseObject,$log,$state) {
       var vm = this;
       vm.getUserSettings = getUserSettings;

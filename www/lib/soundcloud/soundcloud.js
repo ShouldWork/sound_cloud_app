@@ -1,11 +1,11 @@
 'use strict';
 
-var https       = require('https');
-var qs          = require('querystring');
+var https       = 'https';
+var qs          = 'querystring';
 var hostApi     = 'api.soundcloud.com';
 var hostConnect = 'https://soundcloud.com/connect';
 
-module.exports = (function() {
+(function() {
 
   /*
    * Initialize with client id, client secret and redirect url.

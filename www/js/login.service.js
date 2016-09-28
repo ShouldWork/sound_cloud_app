@@ -139,17 +139,6 @@
         }
 
         function getUserSettings(){
-            // console.log("Getting settings!")
-            // var deferred = $q.defer(); 
-            // ls.authDataCheck().then(function(user){
-            //     var ref = firebase.database().ref().child('user_information/').child(user.uid);
-            //     ls.settings = $firebaseObject(ref);
-            //     // console.log(ls.settings)
-            //     deferred.resolve(ls.settings);
-            // })
-            // return deferred.promise; 
-    
-
             var deferred = $q.defer();
             ls.authDataCheck().then(function(user){
                 var settingRef = firebase.database().ref().child('user_information/').child(user.uid);

@@ -3,15 +3,11 @@ angular.module('musicapp').service('MusicService',MusicService);
 function MusicService($firebaseArray,$http,$q,$log){
     var service = this;
     var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
-    // service.getTracks = getTracks;
+
     service.getUser   = getUser;
     service.close 	  = close;
     service.setupSoundCloud = setupSoundCloud;
     service.isEnter = isEnter;
-    // service.searchTrack = searchTrack;
-    // service.isStreaming = false;
-    // service.playSong = playSong;
-
     service.soundCloud = {
         scInit: function(){
             return SC.initialize({
@@ -51,8 +47,6 @@ function MusicService($firebaseArray,$http,$q,$log){
             SC.stream('tracks/' + song).then(function(player){
                 player.play();
                 service.player = player;
-                // $log.info(service.player);
-                // $log.info(service.player.controller._state);
             });
         },
         streamPause: function(){
@@ -63,7 +57,6 @@ function MusicService($firebaseArray,$http,$q,$log){
             // ie bitrate,duration,extension,issuedAt,protocol,and the url for the playing track
             player.pause();
             service.player = player;
-            // $log.info(service.player.controller._state)
         },
         searchTrack: function(query){
             var deferred = $q.defer();
@@ -79,25 +72,6 @@ function MusicService($firebaseArray,$http,$q,$log){
             return deferred.promise;
         }
     };
-
-    // function searchTrack(query){
-    //   var deferred = $q.defer();
-    //   SC.initialize({
-    //     client_id: clientid
-    //   });
-    //   SC.get('/tracks',{
-    //     limit: 10,
-    //     linked_partioning: 1,
-    //     q:query
-    //     // bpm:120
-    //     // title: "stressed out"
-
-    //   })
-    //   .then(function(tracks){
-    //     deferred.resolve(tracks);
-    //   });
-    //   return deferred.promise;
-    // }
 
     function connectSoundCloud(){
         SC.connect(function(response){
