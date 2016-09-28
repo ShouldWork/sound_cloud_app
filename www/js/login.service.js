@@ -140,51 +140,43 @@
 
         function getUserSettings(){
             // console.log("Getting settings!")
-            var deferred = $q.defer(); 
-            ls.authDataCheck().then(function(user){
-                var ref = firebase.database().ref().child('user_information/').child(user.uid);
-                ls.settings = $firebaseObject(ref);
-                // console.log(ls.settings)
-                deferred.resolve(ls.settings);
-            })
-            return deferred.promise; 
+            // var deferred = $q.defer(); 
+            // ls.authDataCheck().then(function(user){
+            //     var ref = firebase.database().ref().child('user_information/').child(user.uid);
+            //     ls.settings = $firebaseObject(ref);
+            //     // console.log(ls.settings)
+            //     deferred.resolve(ls.settings);
+            // })
+            // return deferred.promise; 
     
 
-            // var deferred = $q.defer();
-            // ls.authDataCheck().then(function(user){
-            //     var settingRef = firebase.database().ref().child('user_information/').child(user.uid);
-            //     var objectSetting = $firebaseObject(settingRef);
-            //     objectSetting.$loaded().then(function(){
-            //         var settings = objectSetting;
-            //         if (settings.enable_friends === undefined){
-            //             settingRef.set({
-            //                     enable_friends: true,
-            //                     show_suggest: true,
-            //                     embed_player: true,
-            //                     stream_player: false
-            //                 })
-            //                 .then(function(){
-            //                     ls.settings = {
-            //                         enableFriends: true,
-            //                         showSuggest: true,
-            //                         embedPlayer: true,
-            //                         streamPlayer: false
-            //                     };
-            //                     deferred.resolve(ls.settings)
-            //                 })
-            //         } else {
-            //             // ls.settings = {
-            //             //     enableFriends: settings.enable_friends,
-            //             //     showSuggest: settings.show_suggest,
-            //             //     embedPlayer: settings.embed_player,
-            //             //     streamPlayer: settings.stream_player
-            //             // };
-            //             ls.settings = objectSetting;
-            //             deferred.resolve(ls.settings)
-            //         }
-            //     })
-            // });
-            // return deferred.promise;
+            var deferred = $q.defer();
+            ls.authDataCheck().then(function(user){
+                var settingRef = firebase.database().ref().child('user_information/').child(user.uid);
+                var objectSetting = $firebaseObject(settingRef);
+                objectSetting.$loaded().then(function(){
+                    var settings = objectSetting;
+                    if (settings.enable_friends === undefined){
+                        settingRef.set({
+                                enable_friends: true,
+                                show_suggest: true,
+                                embed_player: true
+                            })
+                            .then(function(){
+                                ls.settings = {
+                                    enableFriends: true,
+                                    showSuggest: true,
+                                    embedPlayer: true
+                                };
+                                deferred.resolve(ls.settings)
+                            })
+                    } else {
+                        ls.settings = objectSetting;
+                        deferred.resolve(ls.settings)
+                    }
+                })
+            });
+            return deferred.promise;
         }
 
     }
