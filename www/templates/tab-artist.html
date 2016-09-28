@@ -1,25 +1,5 @@
 <ion-view view-title="Dance Machine" hide-nav-bar="true">
-	<ion-content class="padding">
-		<!-- embeded player will only show when called -->
-		<!-- <div class="animate-show" ng-show="vm.embededPlayer" id="soundCloudWidget" style="overflow: hidden; height: 150px"></div> -->
-
-		<!--   <div plangular="http://soundcloud.com/mrsjxn/no-love" class="p2 mb3 flex flex-center bg-darken-2 rounded">
-              <button ng-click="playPause()"
-                title="Play/Pause"
-                class="flex-none h2 mr2 button button-transparent button-grow rounded">
-                <svg ng-if="player.playing !== track.src" class="icon geomicon" data-icon="play" viewBox="0 0 32 32" width="32" height="32" style="fill:currentcolor"><path d="M4 4 L28 16 L4 28 z "></path></svg>
-                <svg ng-if="player.playing === track.src" class="icon geomicon" data-icon="pause" viewBox="0 0 32 32" width="32" height="32" style="fill:currentcolor"><path d="M4 4 H12 V28 H4 z M20 4 H28 V28 H20 z "></path></svg>
-              </button>
-              <h2 class="h4 caps flex-auto m0">{{track.user.username}} - {{track.title}}</h2>
-              <samp class="h6">{{ currentTime | hhmmss }} / {{ duration | hhmmss }}</samp>
-          </div>
-         -->
-
-
-
-
-
-
+	<ion-content scroll="false" scrollbar-x="false" scrollbar-y="false" padding="false" class="padding">
 		<!-- searchbox -->
 		<div class="list list-inset">
 			<label style="float: left; width:  75%" class="item-input">
@@ -32,15 +12,14 @@
 
 
 		<!-- Ioncard displaying search results -->
-		<div style="height: 440px; overflow: auto;">
+		<div style="height: 449px; overflow: auto;" class="noScrollbar">
 			<div ng-repeat="detail in vm.searchResults" class="card-background-page animate-repeat" style="margin: 5px">
 				<div class="list">
 					<div ng-click="showing = (showing==true ? false : true)" class="item item-avatar orangeGrad">
 						<img ng-src="{{detail.user.avatar_url}}">
-						<!-- <h2 class="card-title" ng-href="{{ detail.user.permalink_url }}" ng-bind="detail.user.username"></h2> -->
 						<h3 class="card-subtitle" ng-bind="detail.title" class="card-subtitle"></h3>
 						<button ng-show="vm.showingWidget" style="font-size: 2em; float: right" class="button button-outline button-icon ion-ios-play button-calm" ng-click="vm.embedSong(detail.id)"></button>
-						<button  ng-show="vm.isStreaming" style="font-size: 2em; float: right" class="button button-outline button-icon ion-ios-play button-calm animate-show" ng-click="vm.streamSong(detail.id)"></button>
+						<button  ng-show="!vm.showingWidget" style="font-size: 2em; float: right" class="button button-outline button-icon ion-ios-play button-calm animate-show" ng-click="vm.streamSong(detail.id)"></button>
 
 					</div>
 					<!-- Bottom half of the result card. Only show after the header above is clicked -->
@@ -61,10 +40,17 @@
 <!-- 		<button ng-if="vm.searchResults.length > 10" class="button button-block" ng-href="{{vm.searchResults.next_href}}">Next</button>
  -->
 	 <div ng-class="{widgetShow: showingWidget,streamSbow: streamShow}" class="widgetContainer">
-     <!--   <i ng-show="showingWidget" class="ion-stats-bars icon" ng-click="showingWidget = (showingWidget==true ? false : true)" style="font-size: 2em; background: transparent;"></i>
-       <i ng-show="!showingWidget" class="ion-stats-bars" ng-click="showingWidget = (showingWidget==true ? false : true)" style="color: red; font-size: 2em; background: transparent;"></i> -->
-	   <button  ng-show="vm.isStreaming" class="button button-outline button-icon ion-ios-pause button-assertive animate-show" ng-click="vm.streamPause(detail.id)"></button>
-       <div ng-show="vm.showingWidget"  id="soundCloudWidget"></div>
+	  <div ng-show="!vm.showingWidget" class="animate-show" style="display: flex; align-items: center; height: 100%">
+	 	<div style="border-right: 1px solid white">
+	   		<button style="font-size: 3em"  class="button button-icon ion-ios-pause button-assertive animate-show" ng-click="vm.streamPause(detail.id)"></button>
+      	</div>
+      	<div class="padding">
+      		<p>Now Playing</p>
+      	</div>
+      </div>
+      <div ng-show="vm.showingWidget"  id="soundCloudWidget" class="animate-show">
+      	<div style="padding: 2em; font-size=3em; color: rgba(255,102,0,1); text-align: center">Soundcloud Widget</div>
+      </div>
    	</div>
 	</ion-content>
 </ion-view>

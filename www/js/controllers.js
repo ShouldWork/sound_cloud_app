@@ -11,7 +11,8 @@ angular.module('musicapp.controllers', [])
   vm.streamSong = streamSong;
   vm.streamPause = streamPause; 
   vm.initCloud = MusicService.soundCloud.scInit();
-  vm.mySC = MusicService.soundCloud; 
+  vm.mySC = MusicService.soundCloud;
+  vm.user = loginService.currentUser.uid;
   vm.getUserSettings = getUserSettings;
 
 
@@ -21,15 +22,13 @@ angular.module('musicapp.controllers', [])
 
 
   function getUserSettings(){
-    loginService.getUserSettings().then(function(settings){
-      $log.info(settings)
-
-      vm.showingWidget = settings.embedPlayer;
-      vm.isStreaming = settings.streamPlayer; 
-    });
+    var id = vm.user; 
+    var ref = firebase.database().ref().child('user_information/');
+    ref.child(id).once('value',function(snapshot){
+      var data = snapshot.val();
+      vm.showingWidget = data.embed_player;
+    })
   } 
-
-
 
  function embedSong(song){
   console.log("Embed song")
@@ -73,6 +72,7 @@ angular.module('musicapp.controllers', [])
       vm.searchResults = tracks;
     });
   }
+  getUserSettings();
    getTracks();
 })
 
@@ -184,19 +184,31 @@ angular.module('musicapp.controllers', [])
      $scope.Songs = Songs.get($stateParams.songsId);
      })*/
 
-    .controller('AccountCtrl', function($scope,loginService,$firebaseArray,$firebaseObject) {
+    .controller('AccountCtrl', function($scope,loginService,$firebaseArray,$firebaseObject,$log) {
       var vm = this;
       vm.getUserSettings = getUserSettings;
-
+      vm.toggleSetting   = toggleSetting;
+      vm.user            = loginService.currentUser;
+    
+      function toggleSetting(id,setting,set){
+        var user = vm.user; 
+        var ref = firebase.database().ref().child('user_information/');
+        console.log(user.uid)
+        ref.child(id).once("value",function(snapshot){
+          var data = snapshot.val();
+          ref.child(id).child(setting).set(set);
+        })
+        console.log(vm.settings)
+      }
+    
       $scope.$on('$ionicView.enter',function(e){
         getUserSettings(); 
       });
 
 
       function getUserSettings(){
-        loginService.getUserSettings().then(function(settings){
-          vm.settings = settings; 
-        });
-  }
+        var ref = firebase.database().ref().child('user_information/').child(loginService.currentUser.uid);
+         vm.settings = $firebaseObject(ref);
+      }
 });
 

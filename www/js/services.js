@@ -1,6 +1,6 @@
 angular.module('musicapp').service('MusicService',MusicService);
 
-function MusicService($firebaseArray,$http,$q){
+function MusicService($firebaseArray,$http,$q,$log){
     var service = this;
     var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
     // service.getTracks = getTracks;
@@ -51,8 +51,8 @@ function MusicService($firebaseArray,$http,$q){
             SC.stream('tracks/' + song).then(function(player){
                 player.play();
                 service.player = player;
-                $log.info(service.player);
-                $log.info(service.player.controller._state);
+                // $log.info(service.player);
+                // $log.info(service.player.controller._state);
             });
         },
         streamPause: function(){
@@ -63,7 +63,7 @@ function MusicService($firebaseArray,$http,$q){
             // ie bitrate,duration,extension,issuedAt,protocol,and the url for the playing track
             player.pause();
             service.player = player;
-            $log.info(service.player.controller._state)
+            // $log.info(service.player.controller._state)
         },
         searchTrack: function(query){
             var deferred = $q.defer();
