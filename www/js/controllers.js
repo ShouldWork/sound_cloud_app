@@ -84,7 +84,6 @@ angular.module('musicapp.controllers', [])
 
 .controller('landingCtrl', function (loginService,$q,MusicService,$http,$scope, $firebaseAuth, $state, $log, $firebaseObject) {
   vm = this;
-  vm.login = login;
   vm.showLogin = false;
   vm.loginWithEmail = loginWithEmail;
   vm.showEmailLogin = showEmailLogin;
@@ -102,15 +101,6 @@ angular.module('musicapp.controllers', [])
 
       function isEnter(key){
         return MusicService.isEnter(key)
-      }
-
-      function login(provider) {
-        var auth = $firebaseAuth();
-
-
-        auth.$signInWithPopup(provider)
-            .then(loginSuccess)
-            .catch(loginError);
       }
 
       function showEmailLogin() {
@@ -184,11 +174,18 @@ angular.module('musicapp.controllers', [])
      $scope.Songs = Songs.get($stateParams.songsId);
      })*/
 
-    .controller('AccountCtrl', function($scope,loginService,$firebaseArray,$firebaseObject,$log) {
+    .controller('AccountCtrl', function($scope,loginService,$firebaseArray,$firebaseObject,$log,$state) {
       var vm = this;
       vm.getUserSettings = getUserSettings;
       vm.toggleSetting   = toggleSetting;
       vm.user            = loginService.currentUser;
+      vm.signout         = signOut; 
+
+      function signOut(){
+        msg = "Signing out";
+        loginService.signOut(msg);
+        $state.go('landing');
+      }
     
       function toggleSetting(id,setting,set){
         var user = vm.user; 
