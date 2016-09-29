@@ -14,7 +14,9 @@ angular.module('musicapp.controllers', [])
   vm.mySC = MusicService.soundCloud;
   vm.user = loginService.currentUser.uid;
   vm.getUserSettings = getUserSettings;
-
+  vm.warn = function(message){
+    loginService.showAlert("Warning!","You are swipey!!!!");
+  }
 
   $scope.$on('$ionicView.enter',function(e){
     getUserSettings(); 
