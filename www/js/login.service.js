@@ -121,10 +121,13 @@
         }
 
         function loginSuccess(firebaseUser){
-            console.log(firebaseUser)
+            if(firebaseUser.user === undefined){
+                var	user = firebaseUser;   
+            } else {
+                var user = firebaseUser.user;
+            }
             var deferred = $q.defer();
-            var	currentTime = getTime();
-            var	user = firebaseUser;
+            var currentTime = getTime();
             var	userProfile = user.uid;
             var  ref = firebase.database().ref('users/' + userProfile);
             console.log(user.providerData[0].displayName)
