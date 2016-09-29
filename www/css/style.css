@@ -96,11 +96,13 @@
 }
 
 .widgetContainer{
+    position:absolute;
     z-index: 10;
     overflow: hidden;
-    min-width: 90vw;
-    background-color: rgba(0,0,0,0.75);
-    height: 80px;
+    min-width: 100vw;
+    background-color: rgba(0,0,0,0.85);
+    height: 105px;
+    bottom: 0;
 }
 
 .widgetContainerHide{
@@ -122,4 +124,14 @@
 
 .noScrollbar::-webkit-scrollbar{
     display: none;
+}
+
+.listen-content{
+    position: absolute;
+    overflow: auto;
+    bottom: 0px;
+    top: 75px;
+    left: 0;
+    right: 0;
+    padding-bottom: 100px;
 }

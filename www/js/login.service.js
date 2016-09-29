@@ -14,6 +14,7 @@
         ls.currentUser = setCurrentUser();
         ls.authDataCheck = authDataCheck;
         ls.getUserSettings = getUserSettings;
+        ls.loginWithEmail = loginWithEmail;
 
         function authDataCheck(){
             var deferred = $q.defer();
@@ -76,11 +77,57 @@
             })
         }
 
-        function loginSuccess(firebaseUser){
+        function loginWithEmail(email,password) {
+            var deferred = $q.defer(); 
+            firebase.auth().signInWithEmailAndPassword(email, password).then(loginSuccess).catch(function(error) {
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              console.log(errorMessage);
+              // ...
+            })
+            .then(function(data){
+                console.log("this other then")
+                deferred.resolve(data);
+            });
+            return deferred.promise;
 
+
+            // var deferred = $q.defer();
+            // var auth = $firebaseAuth();
+            // auth.$createUserWithEmailAndPassword(email,password)
+            //     .then(function () {
+            //         auth.$signInWithEmailAndPassword(email, password)
+            //             .then(loginSuccess).then(function(data){
+            //                 console.log("successfull")
+            //               deferred.resolve(data);  
+            //             })
+            //             .catch(loginError);
+            //             return deferred.promise;
+            //     }, function (error) {
+            //         if (error.code === "auth/email-already-in-use") {
+            //             auth.$signInWithEmailAndPassword(email, password)
+            //                 .then(loginSuccess).then(function(data){
+            //                     deferred.resolve(data);
+
+            //                 })
+            //                 .catch(loginError);
+            //         } else {
+            //             deferred.resolve(error);
+            //             $log.error(error);
+            //         }
+            //     })
+            // .catch(loginError);
+        }
+
+        function loginSuccess(firebaseUser){
+            if(firebaseUser.user === undefined){
+                var	user = firebaseUser;   
+            } else {
+                var user = firebaseUser.user;
+            }
             var deferred = $q.defer();
-            var	currentTime = getTime();
-            var	user = firebaseUser.user;
+            var currentTime = getTime();
             var	userProfile = user.uid;
             var  ref = firebase.database().ref('users/' + userProfile);
             console.log(user.providerData[0].displayName)
@@ -139,17 +186,6 @@
         }
 
         function getUserSettings(){
-            // console.log("Getting settings!")
-            // var deferred = $q.defer(); 
-            // ls.authDataCheck().then(function(user){
-            //     var ref = firebase.database().ref().child('user_information/').child(user.uid);
-            //     ls.settings = $firebaseObject(ref);
-            //     // console.log(ls.settings)
-            //     deferred.resolve(ls.settings);
-            // })
-            // return deferred.promise; 
-    
-
             var deferred = $q.defer();
             ls.authDataCheck().then(function(user){
                 var settingRef = firebase.database().ref().child('user_information/').child(user.uid);
