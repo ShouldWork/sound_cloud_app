@@ -93,7 +93,9 @@ angular.module('musicapp.controllers', [])
 
       function signInProvider(){
           loginService.signIn('google').then(function(data){
-          $state.go('tab.artist');
+            if (data.uid !== undefined){
+                  $state.go('tab.artist');
+            }
         },function(data){
           console.log(data); 
         })
