@@ -94,6 +94,8 @@ angular.module('musicapp.controllers', [])
       function signInProvider(){
           loginService.signIn('google').then(function(data){
           $state.go('tab.artist');
+        },function(data){
+          console.log(data); 
         })
       }
 
@@ -108,27 +110,16 @@ angular.module('musicapp.controllers', [])
 
 
         function loginWithEmail(key) {
-            $log(key + " " + isEnter(key));
+            $log.info(key + " " + isEnter(key));
             if (isEnter(key)){
-                var auth = $firebaseAuth();
-                auth.$createUserWithEmailAndPassword(vm.email, vm.password)
-                    .then(function () {
-                        auth.$signInWithEmailAndPassword(vm.email, vm.password)
-                            .then(loginSuccess)
-                            .catch(loginError);
-                    }, function (error) {
-                        if (error.code === "auth/email-already-in-use") {
-                            auth.$signInWithEmailAndPassword(vm.email, vm.password)
-                                .then(loginSuccess)
-                                .catch(loginError);
-                        } else {
-                            $log.error(error);
-                        }
-                    })
-                    .catch(loginError);
+              loginService.loginWithEmail(vm.email,vm.password).then(function(){
+                $state.go('tab.artist');
+              });
             }
         }
       })
+
+
     .controller('SongsCtrl', function($scope, bandsintown,$log,MusicService) {
       var song = this; 
       song.getResults = getResults;
