@@ -78,18 +78,29 @@
         }
 
         function loginWithEmail(email,password) {
+            console.log(email + " and " + password)
             var deferred = $q.defer(); 
-            firebase.auth().signInWithEmailAndPassword(email, password).then(loginSuccess).catch(function(error) {
-              // Handle Errors here.
-              var errorCode = error.code;
-              var errorMessage = error.message;
-              console.log(errorMessage);
-              // ...
-            })
-            .then(function(data){
-                console.log("this other then")
-                deferred.resolve(data);
-            });
+            var auth = $firebaseAuth();
+            auth.$createUserWithEmailAndPassword(email,password).then(function(){
+                auth.$signInWithEmailAndPassword(email,password)
+                .then(loginSuccess).then(function(data){
+                    console.log("successfull")
+                    deferred.resolve
+                })
+                .catch(loginError);
+            }, function (error) {
+                    if (error.code === "auth/email-already-in-use") {
+                        auth.$signInWithEmailAndPassword(email,password)
+                        .then(loginSuccess).then(function(data){
+                            deferred.resolve(data);
+                        })
+                        .catch(loginError);
+                    } else {
+                        deferred.resolve(error);
+                        $log.error(error);
+                    }
+                })
+            .catch(loginError);
             return deferred.promise;
 
 
