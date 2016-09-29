@@ -121,7 +121,7 @@
             // console.log(user.providerData[0].displayName)
             setCurrentUser();
             ls.user = $firebaseObject(ref);
-            // log.info(ls.user);
+            log.info(ls.user);
             ls.user.$loaded().then(function(){
                 ref.set({
                     displayName: user.displayName || "New User",

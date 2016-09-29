@@ -59,6 +59,7 @@ angular.module('musicapp.controllers', [])
 
   function searchTrack(query,key){
    if (isEnter(key)){
+      vm.searchResults = {};
       vm.mySC.scInit();
       vm.mySC.searchTrack(query).then(function(tracks){
         vm.searchResults = tracks; 
@@ -89,12 +90,14 @@ angular.module('musicapp.controllers', [])
   vm.showEmailLogin = showEmailLogin;
   vm.isEnter = isEnter; 
   vm.signInProvider = signInProvider;
-
+  vm.showAlert = loginService.showAlert;
 
       function signInProvider(){
           loginService.signIn('google').then(function(data){
-            if (data.uid !== undefined){
+            if (loginService.user){
                   $state.go('tab.artist');
+            } else {
+                vm.showAlert("Login failed!","Something went wrong logging in and stuff. My bad.");
             }
         },function(data){
           console.log(data); 
