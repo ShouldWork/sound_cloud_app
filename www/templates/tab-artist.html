@@ -18,8 +18,8 @@
 					<div ng-click="showing = (showing==true ? false : true)" class="item item-avatar orangeGrad">
 						<img ng-src="{{detail.user.avatar_url}}">
 						<h3 class="card-subtitle" ng-bind="detail.title" class="card-subtitle"></h3>
-						<button ng-show="vm.showingWidget" style="font-size: 2em; float: right" class="button button-outline button-icon ion-ios-play button-calm" ng-click="vm.embedSong(detail.id)"></button>
-						<button  ng-show="!vm.showingWidget" style="font-size: 2em; float: right" class="button button-outline button-icon ion-ios-play button-calm animate-show" ng-click="vm.streamSong(detail.id)"></button>
+						<button ng-show="vm.showingWidget" style="font-size: 2em; float: right" class="button button-icon ion-headphone button-calm" ng-click="vm.embedSong(detail.id)"></button>
+						<button  ng-show="!vm.showingWidget" style="font-size: 2em; float: right" class="button button-icon ion-headphone button-calm animate-show" ng-click="vm.streamSong(detail.id)"></button>
 
 					</div>
 					<!-- Bottom half of the result card. Only show after the header above is clicked -->

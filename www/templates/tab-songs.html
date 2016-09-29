@@ -1,5 +1,36 @@
 <ion-view view-title="Concerts" hide-nav-bar="true">
   <ion-content scroll="false" scrollbar-x="false" scrollbar-y="false" padding="false" class="padding">
+
+    <div style="height: 620px; overflow: auto" class="noScrollbar">
+      <div class="list list-inset">
+        <label style="float: left; width:  75%" class="item-input">
+          <i class="icon ion-search placeholder-icon"></i>
+          <input style="font-size: 2em;" type="text" placeholder="Search" ng-model="searchQuery" ng-keypress="vm.getResults(searchQuery,$event)">
+          <!-- <button class="button icon ion-gear-a"></button> -->
+        </label>
+        <button style="font-size: 3em; margin-right: 5px; float: right" class="button button-icon button-outline ion-search button-calm" type="submit" ng-click="vm.searchTrack(searchQuery)"></button>
+      </div>
+      <div class="listen-content noScrollbar">
+        <div class="list" ng-repeat="venue in vm.resultsBand">
+            <a class="item item-thumbnail-left orangeGrad">
+              <img ng-src="{{vm.resultsBand[0].artists[0].thumb_url}}"/>
+              <h1 class="padding">{{venue.artists[0].name}}</h1>
+              <h2 class="padding">{{venue.formatted_datetime}}</h2>
+              <h2 class="padding">{{venue.formatted_location}}</h2>
+              <h2 class="padding">Venue: {{venue.venue.place}}</h2>
+            </a>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
+
+
+
+<!-- My code -->
+
+<!-- <ion-view view-title="Concerts" hide-nav-bar="true">
+  <ion-content scroll="false" scrollbar-x="false" scrollbar-y="false" padding="false" class="padding">
     <div style="height: 620px; overflow: auto" class="noScrollbar">
     <div class="list list-inset">
       <label style="float: left; width:  75%" class="item-input">
@@ -18,3 +49,4 @@
   </div>
   </ion-content>
 </ion-view>
+ -->

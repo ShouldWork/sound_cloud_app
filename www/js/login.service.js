@@ -2,7 +2,7 @@
     angular.module('musicapp')
         .service('loginService',loginService);
 
-    function loginService($q,$firebaseArray,$firebaseAuth,$firebaseObject,$log,$window){
+    function loginService($q,$firebaseArray,$firebaseAuth,$firebaseObject,$log,$window,$ionicPopup,$timeout){
 
         var ls = this;
         var log = $log;
@@ -15,12 +15,23 @@
         ls.authDataCheck = authDataCheck;
         ls.getUserSettings = getUserSettings;
         ls.loginWithEmail = loginWithEmail;
+        ls.showAlert = showAlert; 
+
+         function showAlert(title,msg) {
+           var alertPopup = $ionicPopup.alert({
+             title: title,
+             template: msg
+           });
+
+           alertPopup.then(function(res) {
+             // console.log('Thank you for not eating my delicious ice cream cone');
+           });
+         };
 
         function authDataCheck(){
             var deferred = $q.defer();
             firebase.auth().onAuthStateChanged(function(user){
                 if (user){
-                    log.info("user is " + user.providerData[0].displayName)
                     deferred.resolve(user)
                 }else{
                     log.error("failed")
@@ -34,7 +45,7 @@
                 name , email, photoURL, uid;
             if (user !== null){
                 ls.currentUser = {
-                    name: user.displayName,
+                    name: user.displayName || "New User",
                     email: user.email,
                     photoURL: user.photoURL,
                     uid: user.uid,
@@ -78,57 +89,23 @@
         }
 
         function loginWithEmail(email,password) {
-            console.log(email + " and " + password)
+            // console.log(email + " and " + password)
             var deferred = $q.defer(); 
             var auth = $firebaseAuth();
-            auth.$createUserWithEmailAndPassword(email,password).then(function(){
-                auth.$signInWithEmailAndPassword(email,password)
-                .then(loginSuccess).then(function(data){
-                    console.log("successfull")
-                    deferred.resolve
-                })
-                .catch(loginError);
-            }, function (error) {
-                    if (error.code === "auth/email-already-in-use") {
-                        auth.$signInWithEmailAndPassword(email,password)
-                        .then(loginSuccess).then(function(data){
-                            deferred.resolve(data);
-                        })
-                        .catch(loginError);
-                    } else {
-                        deferred.resolve(error);
-                        $log.error(error);
-                    }
-                })
-            .catch(loginError);
+            auth.$createUserWithEmailAndPassword(email,password).catch(function(error){
+                if (error.code === "auth/email-already-in-use"){
+                    console.log("Already in use!");
+                    auth.$signInWithEmailAndPassword(email,password).then(loginSuccess).catch(loginError)
+                    .then(function(data){
+                        deferred.resolve(data);
+                    })
+                } else {
+                    console.log("Something else!" . error);
+                    deferred.resolve(error);
+                };
+
+            });
             return deferred.promise;
-
-
-            // var deferred = $q.defer();
-            // var auth = $firebaseAuth();
-            // auth.$createUserWithEmailAndPassword(email,password)
-            //     .then(function () {
-            //         auth.$signInWithEmailAndPassword(email, password)
-            //             .then(loginSuccess).then(function(data){
-            //                 console.log("successfull")
-            //               deferred.resolve(data);  
-            //             })
-            //             .catch(loginError);
-            //             return deferred.promise;
-            //     }, function (error) {
-            //         if (error.code === "auth/email-already-in-use") {
-            //             auth.$signInWithEmailAndPassword(email, password)
-            //                 .then(loginSuccess).then(function(data){
-            //                     deferred.resolve(data);
-
-            //                 })
-            //                 .catch(loginError);
-            //         } else {
-            //             deferred.resolve(error);
-            //             $log.error(error);
-            //         }
-            //     })
-            // .catch(loginError);
         }
 
         function loginSuccess(firebaseUser){
@@ -141,13 +118,13 @@
             var currentTime = getTime();
             var	userProfile = user.uid;
             var  ref = firebase.database().ref('users/' + userProfile);
-            console.log(user.providerData[0].displayName)
+            // console.log(user.providerData[0].displayName)
             setCurrentUser();
             ls.user = $firebaseObject(ref);
             // log.info(ls.user);
             ls.user.$loaded().then(function(){
                 ref.set({
-                    displayName: user.displayName,
+                    displayName: user.displayName || "New User",
                     email: user.email,
                     photoURL: user.photoURL,
                     lastLogin: getTime(),
@@ -157,12 +134,13 @@
                 })
             })
             ls.getUserSettings()
-            deferred.resolve();
+            deferred.resolve(user);
             return deferred.promise;
         }
 
         function loginError(error) {
-            log.error("Authentication failed:", error);
+            ls.showAlert("Login failed!",error.message);
+            // log.error("Authentication failed:", error);
         }
 
         function isLoggedIn(){

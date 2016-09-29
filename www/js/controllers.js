@@ -110,10 +110,11 @@ angular.module('musicapp.controllers', [])
 
 
         function loginWithEmail(key) {
-            $log.info(key + " " + isEnter(key));
             if (isEnter(key)){
-              loginService.loginWithEmail(vm.email,vm.password).then(function(){
-                $state.go('tab.artist');
+              loginService.loginWithEmail(vm.email,vm.password).then(function(data){
+                if (data.uid !== undefined){
+                  $state.go('tab.artist');
+                }
               });
             }
         }
