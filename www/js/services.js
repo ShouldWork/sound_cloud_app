@@ -3,7 +3,8 @@ angular.module('musicapp').service('MusicService',MusicService);
 function MusicService($firebaseArray,$http,$q,$log){
     var service = this;
     var clientid = 'b23455855ab96a4556cbd0a98397ae8c'
-
+    var currentPlayer = false; 
+    var is_playing = false; 
     service.getUser   = getUser;
     service.close 	  = close;
     service.setupSoundCloud = setupSoundCloud;
@@ -36,18 +37,39 @@ function MusicService($firebaseArray,$http,$q,$log){
                 buying: true,
                 liking: false,
                 download: true,
-                show_playcount: true,
-                callback: function(){
-                    $log.info("From the call back in the embedSong");
-                },
-                color: '#ff3a00',
+                show_playcount: true
             });
         },
         streamSong: function(song){
-            SC.stream('tracks/' + song).then(function(player){
-                player.play();
-                service.player = player;
+            var deferred = $q.defer();
+            SC.stream('/tracks/' + song.id).then(function(player){
+                var currentStream = {
+                    id: song.id,
+                    title: song.title,
+                    duration: song.duration,
+                    comment_count: song.comment_count
+                }
+                if (is_playing){
+                    console.log("Should pause: " + is_playing)
+                    console.log(currentPlayer)
+                    currentPlayer.pause();
+                    is_playing = false;
+                } else {
+                    console.log("Should start playing: " + is_playing)
+                    console.log(currentPlayer)
+                    player.play();
+                    is_playing = true;
+                }
+                currentPlayer = player; 
+                deferred.resolve(currentStream);
+            }).catch(function(){
+                console.log(arguments);
             });
+            return deferred.promise; 
+            // SC.stream('tracks/' + song).then(function(player){
+            //     player.play();
+            //     service.player = player;
+            // });
         },
         streamPause: function(){
             var player = service.player;

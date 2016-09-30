@@ -1,6 +1,5 @@
 <ion-view view-title="Dance Machine" hide-nav-bar="true">
 	<ion-content scroll="false" scrollbar-x="false" scrollbar-y="false" padding="false" class="padding">
-	<div style="height: 20vh; width: 100vw; background-color: blue" on-swipe="warn()">Swiper here</div>
 		<!-- searchbox -->
 		<div class="list list-inset">
 			<label style="float: left; width:  75%" class="item-input">
@@ -16,11 +15,11 @@
 		<div class="listen-content noScrollbar">
 			<div ng-repeat="detail in vm.searchResults" class="card-background-page animate-repeat" style="margin: 5px">
 				<div class="list">
-					<div ng-click="showing = (showing==true ? false : true)" class="item item-avatar orangeGrad">
+					<div ng-click="showing = (showing==true ? false : true)" class="item item-avatar orangeGrad" style="box-shadow: 2px 2px 6px rgba(0,0,0,0.5)">
 						<img ng-src="{{detail.user.avatar_url}}">
 						<h3 class="card-subtitle" ng-bind="detail.title" class="card-subtitle"></h3>
 						<button ng-show="vm.showingWidget" style="font-size: 2em; float: right" class="button button-icon ion-headphone button-calm" ng-click="vm.embedSong(detail.id)"></button>
-						<button  ng-show="!vm.showingWidget" style="font-size: 2em; float: right" class="button button-icon ion-headphone button-calm animate-show" ng-click="vm.streamSong(detail.id)"></button>
+						<button  ng-show="!vm.showingWidget" style="font-size: 2em; float: right" class="button button-icon ion-headphone button-calm animate-show" ng-click="vm.streamSong(detail)"></button>
 
 					</div>
 					<!-- Bottom half of the result card. Only show after the header above is clicked -->
@@ -36,17 +35,14 @@
 
 		<!-- Only show this if there are no results from the search -->
 		<div ng-if="vm.searchResults.length <= 0">No results for '{{ searchQuery }}'</div>
-
-		<!-- Get next array of 20 items from random search, current not working -->
-<!-- 		<button ng-if="vm.searchResults.length > 10" class="button button-block" ng-href="{{vm.searchResults.next_href}}">Next</button>
- -->
-	 <div ng-class="{widgetShow: showingWidget,streamSbow: streamShow}" class="widgetContainer">
+	 	<div ng-class="{widgetShow: showingWidget,streamSbow: streamShow}" class="widgetContainer">
 	  <div ng-show="!vm.showingWidget" class="animate-show" style="display: flex; align-items: center; height: 100%">
 	 	<div style="border-right: 1px solid white">
-	   		<button style="font-size: 3em"  class="button button-icon ion-ios-pause button-assertive animate-show" ng-click="vm.streamPause(detail.id)"></button>
+	   		<button style="font-size: 3em"  class="button button-icon ion-ios-pause button-assertive animate-show" ng-click="vm.streamSong(vm.currentStream)"></button>
       	</div>
       	<div class="padding">
-      		<p>Now Playing</p>
+      		<p>Now Playing: {{vm.currentStream.title}}</p>
+      		<p>Comments: {{vm.currentStream.comment_count}}</p>
       	</div>
       </div>
       <div ng-show="vm.showingWidget"  id="soundCloudWidget" class="animate-show">

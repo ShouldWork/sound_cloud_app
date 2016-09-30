@@ -43,11 +43,11 @@ angular.module('musicapp.controllers', [])
 
 
  function streamSong(song){
-
-  event.stopPropagation();
-  vm.mySC.scInit();
-  vm.mySC.streamSong(song);
-  vm.isStreaming = true; 
+    event.stopPropagation();
+    vm.mySC.scInit();
+    vm.mySC.streamSong(song).then(function(currentStream){
+      vm.currentStream = currentStream;
+    })
  }
 
  function streamPause(song){
