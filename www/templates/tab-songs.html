@@ -8,7 +8,7 @@
           <input style="font-size: 2em;" type="text" placeholder="Search" ng-model="searchQuery" ng-keypress="vm.getResults(searchQuery,$event)">
           <!-- <button class="button icon ion-gear-a"></button> -->
         </label>
-        <button style="font-size: 3em; margin-right: 5px; float: right" class="button button-icon button-outline ion-search button-calm" type="submit" ng-click="vm.searchTrack(searchQuery)"></button>
+        <button style="font-size: 3em; margin-right: 5px; float: right" class="button button-icon button-outline ion-search button-calm" type="submit" ng-click="vm.getResults(searchQuery)"></button>
       </div>
       <div class="listen-content noScrollbar">
         <div class="list" ng-repeat="venue in vm.resultsBand">
