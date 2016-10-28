@@ -118,11 +118,19 @@ angular.module('musicapp.controllers', [])
 
         function loginWithEmail(key) {
             if (isEnter(key)){
-              loginService.loginWithEmail(vm.email,vm.password).then(function(data){
-                if (data.uid !== undefined){
-                  $state.go('tab.artist');
-                }
-              });
+              console.log(vm.email);
+              if (vm.email !== undefined && vm.password !== undefined){
+                loginService.loginWithEmail(vm.email,vm.password).then(function(data){
+                  if (data.uid !== undefined){
+                    vm.email = '';
+                    vm.password = '';
+                    vm.showLogin = !vm.showLogin;
+                    $state.go('tab.artist');
+                  }
+                });
+              } else {
+                vm.showAlert("Login failed","The password or email field is blank!");
+              }
             }
         }
       })
