@@ -70,23 +70,14 @@
         }
 
         function signOut(msg){
-            var auth = $firebaseAuth();
-            var user = firebase.auth().currentUser;
-            var ref = firebase.database().ref('users/' + user.uid);
-            ls.user = $firebaseObject(ref);
-            ls.user.$loaded().then(function(){
-                ref.update({
-                    logoutTime: getTime(),
-                    active: false
-                })
-            }).then(function(){
-                auth.$signOut();
-                ls.currentUser = undefined;
-                ls.isLoggedIn = isLoggedIn();
-            }, function(error){
-                log.error("An error occurred: " + error)
-            })
-        }
+            user = ls.currentUser.name || ls.currentUser.email; 
+            firebase.auth().signOut().then(function(){
+                console.log(msg + " " + user);
+                ls.showAlert(user + " has been logged out","You have successfully logged out, thanks us checking it out!")
+            },function(error){
+                console.log("An error happened " + error);
+            });
+        };
 
         function loginWithEmail(email,password) {
             // console.log(email + " and " + password)
