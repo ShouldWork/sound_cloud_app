@@ -93,8 +93,6 @@ angular.module('musicapp.controllers', [])
   vm.isEnter = isEnter; 
   vm.signInProvider = signInProvider;
   vm.showAlert = loginService.showAlert;
-  vm.email = '';
-  vm.password = '';
 
       function signInProvider(){
           loginService.signIn('google').then(function(data){
@@ -120,6 +118,7 @@ angular.module('musicapp.controllers', [])
 
         function loginWithEmail(key) {
             if (isEnter(key)){
+              console.log(vm.email);
               if (vm.email !== undefined && vm.password !== undefined){
                 loginService.loginWithEmail(vm.email,vm.password).then(function(data){
                   if (data.uid !== undefined){
@@ -130,7 +129,7 @@ angular.module('musicapp.controllers', [])
                   }
                 });
               } else {
-                vm.showAlert("Login failed","The password or email field is blank!");
+                vm.showAlert("Login failed","The Email or Password is invalid!");
               }
             }
         }
