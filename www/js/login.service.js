@@ -10,12 +10,13 @@
         ls.signOut	   = signOut;
         ls.getTime	   = getTime;
         // ls.signOut();
-        ls.isLoggedIn  = isLoggedIn();
-        ls.currentUser = setCurrentUser();
+        // ls.isLoggedIn  = isLoggedIn();
+        // ls.currentUser = setCurrentUser();
         ls.authDataCheck = authDataCheck;
         ls.getUserSettings = getUserSettings;
         ls.loginWithEmail = loginWithEmail;
         ls.showAlert = showAlert; 
+        ls.newUserPopUp = newUserPopUp; 
 
          function showAlert(title,msg) {
            var alertPopup = $ionicPopup.alert({
@@ -40,34 +41,55 @@
             return deferred.promise;
         }
 
-        function setCurrentUser(){
-            var user = firebase.auth().currentUser,
-                name , email, photoURL, uid;
-            if (user !== null){
-                ls.currentUser = {
-                    name: user.displayName || "New User",
-                    email: user.email,
-                    photoURL: user.photoURL,
-                    uid: user.uid,
-                    today: getTime()
-                };
-                ls.isLoggedIn = true;
-                // log(ls.currentUser)
-            } else{
-                ls.currentUser = undefined;
-                ls.isLoggedIn = false;
-            }
-        }
+
+        function newUserPopUp(){
+          ls.data = {};
+          var myPopup = $ionicPopup.show({
+            template: '<input type="text" ng-model="data.userName">',
+            title: 'What can I call you?',
+            subTitle: 'Please use normal things',
+            // scope: $scope,
+            buttons: [
+              { text: 'Cancel' },
+              {
+                text: '<b>Save</b>',
+                type: 'button-positive',
+                onTap: function(e) {
+                    console.log(ls.data);
+                  if (!ls.data.userName) {
+                    e.preventDefault();
+                  } else {
+                    return ls.data.userName;
+                  }
+                }
+              }
+            ]
+          });
+
+          myPopup.then(function(res) {
+            console.log('Tapped!', res);
+          });
+
+          // $timeout(function() {
+          //    myPopup.close(); //close the popup after 3 seconds for some reason
+          // }, 3000);
+         };
+
+
+
 
         function signIn(provider){
+            var deferred = $q.defer(); 
             var auth = $firebaseAuth();
-            return auth.$signInWithPopup(provider)
-                .then(loginSuccess).then(function(data){
-
-                    ls.isLoggedIn = isLoggedIn();
+            auth.$signInWithPopup(provider)
+                .then(loginSuccessProvider).then(function(data){
+                    ls.isLoggedIn = true; 
+                    deferred.resolve(data)
                 })
                 .catch(loginError);
+            return deferred.promise; 
         }
+
 
         function signOut(msg){
             user = ls.currentUser.name || ls.currentUser.email; 
@@ -86,7 +108,7 @@
             auth.$createUserWithEmailAndPassword(email,password).catch(function(error){
                 if (error.code === "auth/email-already-in-use"){
                     console.log("Already in use!");
-                    auth.$signInWithEmailAndPassword(email,password).then(loginSuccess).catch(loginError)
+                    auth.$signInWithEmailAndPassword(email,password).then(loginSuccessEmail).catch(loginError)
                     .then(function(data){
                         deferred.resolve(data);
                     })
@@ -99,34 +121,93 @@
             return deferred.promise;
         }
 
-        function loginSuccess(firebaseUser){
-            if(firebaseUser.user === undefined){
-                var	user = firebaseUser;   
-            } else {
-                var user = firebaseUser.user;
-            }
+        function loginSuccessProvider(firebaseUser){
             var deferred = $q.defer();
-            var currentTime = getTime();
-            var	userProfile = user.uid;
-            var  ref = firebase.database().ref('users/' + userProfile);
-            // console.log(user.providerData[0].displayName)
-            setCurrentUser();
-            ls.user = $firebaseObject(ref);
-            log.info(ls.user);
-            ls.user.$loaded().then(function(){
-                ref.set({
-                    displayName: user.displayName || "New User",
-                    email: user.email,
-                    photoURL: user.photoURL,
-                    lastLogin: getTime(),
-                    active: true,
-                    uid: user.uid
-                }).then(function(){
-                })
+            var userData = {};
+            var user = firebaseUser.user;
+            var proData = user.providerData[0];
+            var ref = firebase.database().ref('users/').child(user.uid);
+            ref.once('value').then(function(snapshot){
+                if (!snapshot.exists()){
+                    console.log("Creating new user " + proData.displayName); 
+                    var newUser = $firebaseObject(ref);
+                    newUser.$loaded().then(function(){
+                        userData = {
+                                displayName: proData.displayName,
+                                email: user.email,
+                                photoURL: proData.photoURL,
+                                lastLogin: getTime(),
+                                active: true,
+                                uid: user.uid
+                            };
+                        user.displayName = proData.displayName; 
+                        ref.set(userData);
+                        ls.currentUser = {
+                            name: proData.displayName,
+                            email: user.email,
+                            photoURL: proData.photoURL,
+                            uid: user.uid
+                        }
+                        deferred.resolve(userData)
+                    }); 
+                } else {
+                    var updateUser = $firebaseObject(ref);
+                    updateUser.$loaded().then(function(){
+                        ref.set({
+                            active: true,
+                            lastLogin: getTime(),
+                        })
+                    })
+                    ls.currentUser = {
+                        name: proData.displayName,
+                        email: user.email,
+                        photoURL: proData.photoURL,
+                        uid: user.uid
+                    };
+                    console.log("Updating user " + proData.displayName);
+                    deferred.resolve(proData);
+                }
+            });
+            return deferred.promise; 
+        }
+
+        function loginSuccessEmail(firebaseUser){
+            console.log(firebaseUser);
+            var user = firebaseUser; 
+            var ref = firebase.database().ref('users/').child(user.uid)
+            ref.once('value').then(function(snapshot){
+                if(!snapshot.exist()){
+                    newUserPopUp().then(function(data){
+                        console.log(data);
+                    }) 
+                }
             })
-            ls.getUserSettings()
-            deferred.resolve(user);
-            return deferred.promise;
+            // if(firebaseUser.user === undefined){
+            //     var user = firebaseUser;   
+            // } else {
+            //     var user = firebaseUser.user;
+            // }
+            // var deferred = $q.defer();
+            // var currentTime = getTime();
+            // var	userProfile = user.uid;
+            // var  ref = firebase.database().ref('users/' + userProfile);
+            // setCurrentUser();
+            // ls.user = $firebaseObject(ref);
+            // log.info(ls.user);
+            // ls.user.$loaded().then(function(){
+            //     ref.set({
+            //         displayName: user.displayName || ls.newUserPopUp(),
+            //         email: user.email,
+            //         photoURL: user.photoURL,
+            //         lastLogin: getTime(),
+            //         active: true,
+            //         uid: user.uid
+            //     }).then(function(){
+            //     })
+            // })
+            // ls.getUserSettings()
+            // deferred.resolve(user);
+            // return deferred.promise;
         }
 
         function loginError(error) {
@@ -134,16 +215,16 @@
             // log.error("Authentication failed:", error);
         }
 
-        function isLoggedIn(){
-            firebase.auth().onAuthStateChanged(function(user){
-                if (user){
-                    setCurrentUser();
-                    return ls.isLoggedIn = true;
-                }else{
-                    return ls.isLoggedIn = false;
-                }
-            });
-        }
+        // function isLoggedIn(){
+        //     firebase.auth().onAuthStateChanged(function(user){
+        //         if (user){
+        //             setCurrentUser();
+        //             return ls.isLoggedIn = true;
+        //         }else{
+        //             return ls.isLoggedIn = false;
+        //         }
+        //     });
+        // }
 
         function getTime(){
 

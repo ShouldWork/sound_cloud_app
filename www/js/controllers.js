@@ -24,12 +24,16 @@ angular.module('musicapp.controllers', [])
 
 
   function getUserSettings(){
-    var id = vm.user; 
-    var ref = firebase.database().ref().child('user_information/');
-    ref.child(id).once('value',function(snapshot){
-      var data = snapshot.val();
-      vm.showingWidget = data.embed_player;
-    })
+
+    loginService.getUserSettings().then(function(data){
+        vm.showingWidget = data.embed_player; 
+    });
+    // var id = vm.user; 
+    // var ref = firebase.database().ref().child('user_information/');
+    // ref.child(id).once('value',function(snapshot){
+    //   var data = snapshot.val();
+    //   vm.showingWidget = data.embed_player;
+    // })
   } 
 
  function embedSong(song){
@@ -96,13 +100,13 @@ angular.module('musicapp.controllers', [])
 
       function signInProvider(){
           loginService.signIn('google').then(function(data){
-            if (loginService.user){
+            if (data.uid){
                   $state.go('tab.artist');
             } else {
                 vm.showAlert("Login failed!","Something went wrong logging in and stuff. My bad.");
             }
-        },function(data){
-          console.log(data); 
+        },function(error){
+          console.log("error: " + error); 
         })
       }
 
@@ -121,6 +125,7 @@ angular.module('musicapp.controllers', [])
               console.log(vm.email);
               if (vm.email !== undefined && vm.password !== undefined){
                 loginService.loginWithEmail(vm.email,vm.password).then(function(data){
+                  console.log(data);
                   if (data.uid !== undefined){
                     vm.email = '';
                     vm.password = '';
@@ -184,6 +189,7 @@ angular.module('musicapp.controllers', [])
 
 
       function getUserSettings(){
+        console.log(loginService.currentUser);
         var ref = firebase.database().ref().child('user_information/').child(loginService.currentUser.uid);
          vm.settings = $firebaseObject(ref);
       }
