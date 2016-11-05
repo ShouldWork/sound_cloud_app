@@ -101,7 +101,12 @@ angular.module('musicapp.controllers', [])
   vm.updateUserDisplayName = updateUserDisplayName; 
 
       function updateUserDisplayName(name){
-        console.log(name);
+          loginService.updateUserDisplayName(name).then(function(data){
+              vm.email = '';
+              vm.password = '';
+              vm.showLogin = !vm.showLogin;
+              $state.go('tab.artist');
+        }); 
       }
 
       function signInProvider(){
@@ -113,7 +118,7 @@ angular.module('musicapp.controllers', [])
                 vm.showAlert("Login failed!","Something went wrong logging in and stuff. My bad.");
             }
         },function(error){
-          console.log("error: " + error); 
+          console.log("error: " + error.message); 
         })
       }
 
