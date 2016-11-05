@@ -97,9 +97,16 @@ angular.module('musicapp.controllers', [])
   vm.isEnter = isEnter; 
   vm.signInProvider = signInProvider;
   vm.showAlert = loginService.showAlert;
+  vm.testText = "jimmy";
+  vm.updateUserDisplayName = updateUserDisplayName; 
+
+      function updateUserDisplayName(name){
+        console.log(name);
+      }
 
       function signInProvider(){
           loginService.signIn('google').then(function(data){
+          console.log(data.displayName);
             if (data.uid){
                   $state.go('tab.artist');
             } else {
@@ -122,15 +129,18 @@ angular.module('musicapp.controllers', [])
 
         function loginWithEmail(key) {
             if (isEnter(key)){
-              console.log(vm.email);
               if (vm.email !== undefined && vm.password !== undefined){
                 loginService.loginWithEmail(vm.email,vm.password).then(function(data){
                   console.log(data);
-                  if (data.uid !== undefined){
-                    vm.email = '';
-                    vm.password = '';
-                    vm.showLogin = !vm.showLogin;
-                    $state.go('tab.artist');
+                  if (data.displayName === null){
+                    $state.go('user');
+                  } else {
+                    if (data.uid !== undefined){
+                      vm.email = '';
+                      vm.password = '';
+                      vm.showLogin = !vm.showLogin;
+                      $state.go('tab.artist');
+                    }
                   }
                 });
               } else {

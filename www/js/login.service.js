@@ -9,9 +9,6 @@
         ls.signIn 	   = signIn;
         ls.signOut	   = signOut;
         ls.getTime	   = getTime;
-        // ls.signOut();
-        // ls.isLoggedIn  = isLoggedIn();
-        // ls.currentUser = setCurrentUser();
         ls.authDataCheck = authDataCheck;
         ls.getUserSettings = getUserSettings;
         ls.loginWithEmail = loginWithEmail;
@@ -44,36 +41,68 @@
 
         function newUserPopUp(){
           ls.data = {};
-          var myPopup = $ionicPopup.show({
-            template: '<input type="text" ng-model="data.userName">',
-            title: 'What can I call you?',
-            subTitle: 'Please use normal things',
-            // scope: $scope,
-            buttons: [
-              { text: 'Cancel' },
-              {
-                text: '<b>Save</b>',
-                type: 'button-positive',
-                onTap: function(e) {
-                    console.log(ls.data);
-                  if (!ls.data.userName) {
-                    e.preventDefault();
-                  } else {
-                    return ls.data.userName;
-                  }
+             var myPopup = $ionicPopup.show({
+             template: '<input type = "text" ng-model = "data.model">',
+             title: 'Title',
+             subTitle: 'Subtitle',
+             scope: $scope,
+                
+             buttons: [
+                { text: 'Cancel' }, {
+                   text: '<b>Save</b>',
+                   type: 'button-positive',
+                      onTap: function(e) {
+                            
+                         if (!$scope.data.model) {
+                            //don't allow the user to close unless he enters model...
+                               e.preventDefault();
+                         } else {
+                            return $scope.data.model;
+                         }
+                      }
                 }
-              }
-            ]
+             ]
           });
 
-          myPopup.then(function(res) {
-            console.log('Tapped!', res);
-          });
+      myPopup.then(function(res) {
+         console.log('Tapped!', res);
+      });    
+    };
 
-          // $timeout(function() {
-          //    myPopup.close(); //close the popup after 3 seconds for some reason
-          // }, 3000);
-         };
+
+
+
+
+         //  var myPopup = $ionicPopup.show({
+         //    template: '<input type="text" ng-model="data.userName">',
+         //    title: 'What can I call you?',
+         //    subTitle: 'Please use normal things',
+         //    scope: ls.data,
+         //    buttons: [
+         //      { text: 'Cancel' },
+         //      {
+         //        text: '<b>Save</b>',
+         //        type: 'button-positive',
+         //        onTap: function(e) {
+         //            console.log(data);
+         //          if (!ls.data.userName) {
+         //            e.preventDefault();
+         //          } else {
+         //            return ls.data.userName;
+         //          }
+         //        }
+         //      }
+         //    ]
+         //  });
+
+         //  myPopup.then(function(res) {
+         //    console.log('Tapped!', res);
+         //  });
+
+         //  // $timeout(function() {
+         //  //    myPopup.close(); //close the popup after 3 seconds for some reason
+         //  // }, 3000);
+         // };
 
 
 
@@ -101,26 +130,47 @@
             });
         };
 
-        function loginWithEmail(email,password) {
-            // console.log(email + " and " + password)
+        // function loginWithEmail(email,password) {
+        //     // console.log(email + " and " + password)
+        //     var deferred = $q.defer(); 
+        //     var auth = $firebaseAuth();
+        //     auth.$createUserWithEmailAndPassword(email,password).catch(function(error){
+        //         if (error.code === "auth/email-already-in-use"){
+        //             console.log("Already in use!");
+        //             auth.$signInWithEmailAndPassword(email,password).then(loginSuccessEmail).catch(loginError)
+        //             .then(function(data){
+        //                 deferred.resolve(data);
+        //             })
+        //         } else {
+        //             console.log("Something else!" . error);
+        //             deferred.resolve(error);
+        //         };
+
+        //     });
+        //     return deferred.promise;
+        // }
+
+        function loginWithEmail(email,password){
             var deferred = $q.defer(); 
-            var auth = $firebaseAuth();
-            auth.$createUserWithEmailAndPassword(email,password).catch(function(error){
-                if (error.code === "auth/email-already-in-use"){
-                    console.log("Already in use!");
-                    auth.$signInWithEmailAndPassword(email,password).then(loginSuccessEmail).catch(loginError)
-                    .then(function(data){
-                        deferred.resolve(data);
-                    })
-                } else {
-                    console.log("Something else!" . error);
-                    deferred.resolve(error);
-                };
-
+            var auth = $firebaseAuth(); 
+            auth.$signInWithEmailAndPassword(email,password).then(function(data){
+                console.log(data);
+                ls.currentUser = {
+                    displayName: data.displayName,
+                    email: data.email,
+                    photoURL: null,
+                    lastLogin: getTime(),
+                    active: true,
+                    uid: data.uid
+                }
+                deferred.resolve(data)
+            }).catch(function(error){
+                console.log(error.code + ":---" + error.message)
+                deferred.resolve(error);  
             });
-            return deferred.promise;
+            return deferred.promise; 
         }
-
+        
         function loginSuccessProvider(firebaseUser){
             var deferred = $q.defer();
             var userData = {};
