@@ -105,17 +105,19 @@
             // console.log(email + " and " + password)
             var deferred = $q.defer(); 
             var auth = $firebaseAuth();
-            auth.$createUserWithEmailAndPassword(email,password).catch(function(error){
-                if (error.code === "auth/email-already-in-use"){
+           return auth.$createUserWithEmailAndPassword(email,password).catch(function(error){
+                console.log(error.code);
+                // if (error.code === "auth/email-already-in-use"){
                     console.log("Already in use!");
+                    console.log(password);
                     auth.$signInWithEmailAndPassword(email,password).then(loginSuccessEmail).catch(loginError)
                     .then(function(data){
                         deferred.resolve(data);
                     })
-                } else {
-                    console.log("Something else!" . error);
-                    deferred.resolve(error);
-                };
+                // } else {
+                //     console.log("Something else!" . error);
+                //     // deferred.resolve(error);
+                // };
 
             });
             return deferred.promise;
@@ -172,16 +174,23 @@
         }
 
         function loginSuccessEmail(firebaseUser){
-            console.log(firebaseUser);
+            var deferred = $q.defer(); 
+            console.log(firebaseUser.uid);
             var user = firebaseUser; 
             var ref = firebase.database().ref('users/').child(user.uid)
             ref.once('value').then(function(snapshot){
+                console.log(snapshot);
                 if(!snapshot.exist()){
                     newUserPopUp().then(function(data){
                         console.log(data);
+                        deferred.resolve(data);
                     }) 
+                } else {
+                    console.log("Something else");
+                    deferred.resolve(data);                        
                 }
-            })
+                return deferred.promise;
+            });
             // if(firebaseUser.user === undefined){
             //     var user = firebaseUser;   
             // } else {
