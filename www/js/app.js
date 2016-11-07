@@ -54,6 +54,12 @@ var app = angular.module('musicapp', [
   controller: 'landingCtrl',
     controllerAs: 'vm'
   })
+  .state('user', {
+    url: '/user',
+    templateUrl: 'templates/newuserpopup.html',
+    controller: 'landingCtrl',
+      controllerAs: 'vm'
+  })
 
   // setup an abstract state for the tabs directive
     .state('tab', {
