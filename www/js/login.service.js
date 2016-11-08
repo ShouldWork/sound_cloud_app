@@ -81,44 +81,97 @@
         };
 
 
-
-
-        function loginWithEmail(email,password) {
-            var deferred = $q.defer(); 
+        function loginWithEmail(email,password){
             var auth = $firebaseAuth();
-           return auth.$createUserWithEmailAndPassword(email,password).catch(function(error){
-                console.log(error.code);
-                if (error.code === "auth/email-already-in-use"){
-                    console.log("Already in use!");
-                    // auth.$signInWithEmailAndPassword(email,password).then(loginSuccessEmail).catch(loginError)
-                    auth.$signInWithEmailAndPassword(email,password).then(function(data){
-                        ls.currentUser = {
-                            displayName: data.displayName,
-                            email: data.email,
-                            photoURL: null,
-                            lastLogin: getTime(),
-                            active: true,
-                            uid: data.uid
-                        }
-                        ls.getuserSettings(); 
-                        deferred.resolve(data)
-                    }).catch(loginError)
+            return auth.$createUserWithEmailAndPassword(email,password).then(loginSuccessEmail).catch(function(error){
+                if(error.code === 'auth/email-already-in-use'){
+                    var auth = $firebaseAuth();
+                    var deferred = $q.defer(); 
+                    auth.$signInWithEmailAndPassword(email,password)
+                    .then(loginSuccessEmail)
+                    .catch(function(error){
+                        console.log("Login failed for " + email + " Error: " + error.code);
+                        ls.showAlert('Login failed', error.message); 
+                    })
                     .then(function(data){
+                        console.log("data " + data);
+                        ls.isLoggedIn = true;
+                        if(!snap.exists()){
+                            console.log("Creating user profile");
+                            var newUser = $firebaseObject(ref);
+                            newUser.$loaded().then(function(){
+                                userData = {
+                                    displayName: user.displayName,
+                                    email: user.email,
+                                    photoURL: user.photoURL || null,
+                                    lastLogin: getTime(),
+                                    active: true,
+                                    uid: user.uid
+                                }
+                            })
+                            ref.set(userData);
+                            ls.currentUser = userData;
+                            console.log(user);
+                            // deferred.resolve(user);
+                        } 
                         deferred.resolve(data);
                     })
-                } else {
-                    ls.currentUser = {
-                        displayName: data.displayName,
-                        email: data.email,
-                        photoURL: null,
-                        lastLogin: getTime(),
-                        active: true,
-                        uid: data.uid
-                    }
-                    console.log("Something else!" . error);
-                };
+                    return deferred.promise;
+                }
+            });
+        }
 
+
+        function loginSuccessEmail(firebaseUser){
+            var deferred = $q.defer();
+            console.log(firebaseUser);
+            // console.log(data);
+            var user = firebaseUser;
+            console.log(user.uid);
+            var ref = firebase.database().ref('users/').child(user.uid);
+            ref.once('value').then(function(snap){
+                if(!snap.exists()){
+                    console.log("Creating user profile");
+                    var newUser = $firebaseObject(ref);
+                    newUser.$loaded().then(function(){
+                        userData = {
+                            displayName: user.displayName,
+                            email: user.email,
+                            photoURL: user.photoURL || null,
+                            lastLogin: getTime(),
+                            active: true,
+                            uid: user.uid
+                        }
+                    })
+                    ref.set(userData);
+                    ls.currentUser = userData;
+                    console.log(user);
+                    // deferred.resolve(user);
+                } 
+            },function(error){
+                console.log("Error when creating profile! " + error.message);
+                deferred.resolve(error);
             })
+            deferred.resolve(user);
+            return deferred.promise; 
+        }
+
+        function createProfile(user){
+            var deferred = $q.defer();
+            var newUser = $firebaseObject(ref);
+            newUser.$loaded().then(function(){
+                userData = {
+                    displayName: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL || null,
+                    lastLogin: getTime(),
+                    active: true,
+                    uid: user.uid
+                }
+            })
+            ref.set(userData);
+            ls.currentUser = userData;
+            deferred.resolve(user);
             return deferred.promise;
         }
 
@@ -171,52 +224,6 @@
                 }
             });
             return deferred.promise; 
-        }
-
-        function loginSuccessEmail(firebaseUser){
-            var deferred = $q.defer(); 
-            console.log(firebaseUser.uid);
-            var user = firebaseUser; 
-            var ref = firebase.database().ref('users/').child(user.uid)
-            ref.once('value').then(function(snapshot){
-                console.log(snapshot);
-                if(!snapshot.exist()){
-                    newUserPopUp().then(function(data){
-                        console.log(data);
-                        deferred.resolve(data);
-                    }) 
-                } else {
-                    console.log("Something else");
-                    deferred.resolve(data);                        
-                }
-                return deferred.promise;
-            });
-            // if(firebaseUser.user === undefined){
-            //     var user = firebaseUser;   
-            // } else {
-            //     var user = firebaseUser.user;
-            // }
-            // var deferred = $q.defer();
-            // var currentTime = getTime();
-            // var	userProfile = user.uid;
-            // var  ref = firebase.database().ref('users/' + userProfile);
-            // setCurrentUser();
-            // ls.user = $firebaseObject(ref);
-            // log.info(ls.user);
-            // ls.user.$loaded().then(function(){
-            //     ref.set({
-            //         displayName: user.displayName || ls.newUserPopUp(),
-            //         email: user.email,
-            //         photoURL: user.photoURL,
-            //         lastLogin: getTime(),
-            //         active: true,
-            //         uid: user.uid
-            //     }).then(function(){
-            //     })
-            // })
-            // ls.getUserSettings()
-            // deferred.resolve(user);
-            // return deferred.promise;
         }
 
         function loginError(error) {
