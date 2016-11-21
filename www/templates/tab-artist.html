@@ -15,7 +15,7 @@
 		<div class="listen-content noScrollbar">
 			<div ng-repeat="detail in vm.searchResults" class="card-background-page animate-repeat" style="margin: 5px">
 				<div class="list">
-					<div ng-click="showing = (showing==true ? false : true)" class="item item-avatar orangeGrad" style="box-shadow: 2px 2px 6px rgba(0,0,0,0.5)">
+					<div ng-click="showing = (showing==true ? false : true)" class="item item-avatar blueGrad" style="box-shadow: 2px 2px 6px rgba(0,0,0,0.5)">
 						<img ng-src="{{detail.user.avatar_url}}">
 						<h3 class="card-subtitle" ng-bind="detail.title" class="card-subtitle"></h3>
 						<button ng-show="vm.showingWidget" style="font-size: 2em; float: right" class="button button-icon ion-headphone button-calm" ng-click="vm.embedSong(detail.id)"></button>
@@ -36,7 +36,7 @@
 		<!-- Only show this if there are no results from the search -->
 		<div ng-if="vm.searchResults.length <= 0">No results for '{{ searchQuery }}'</div>
 	 	<div ng-class="{widgetShow: showingWidget,streamSbow: streamShow}" class="widgetContainer">
-	  <div ng-show="!vm.showingWidget" class="animate-show" style="display: flex; align-items: center; height: 100%">
+	  	<div ng-show="!vm.showingWidget" class="animate-show" style="display: flex; align-items: center; height: 100%">
 	 	<div style="border-right: 1px solid white">
 	   		<button style="font-size: 3em"  class="button button-icon ion-ios-pause button-assertive animate-show" ng-click="vm.streamSong(vm.currentStream)"></button>
       	</div>

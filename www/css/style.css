@@ -122,6 +122,10 @@
 	background: linear-gradient(35deg,rgba(255,102,0,1),rgba(255,102,0,.50),rgba(255,102,0,.8));
 }
 
+.blueGrad{
+    background: linear-gradient(35deg,#387ef5,rgba(17, 193, 243, 0.39),rgb(115, 191, 212));
+}
+
 .noScrollbar::-webkit-scrollbar{
     display: none;
 }
